@@ -5,4 +5,4 @@
 
 ## Documentation
 
-For more information about using Python 
+For more information about using Python and Django
