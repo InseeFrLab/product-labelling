@@ -1,0 +1,13 @@
+django
+gunicorn
+psycopg2
+django-heroku
+numpy
+pandas
+joblib
+djangorestframework
+markdown
+django-filter
+pybind11>=2.2
+#git+https://github.com/facebookresearch/fastText.git
+fasttext

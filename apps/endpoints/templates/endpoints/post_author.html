@@ -1,0 +1,9 @@
+{% extends 'endpoints/base.html' %}
+
+{% block content %}
+    <h3>Quel est votre nom ?</h3>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Prédiction</button>
+    </form>
+{% endblock %}
