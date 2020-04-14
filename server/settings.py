@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-import django_heroku
+#import django_heroku
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -78,19 +78,19 @@ WSGI_APPLICATION = "server.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-#DATABASES = {
-#    "default": {
-#        "ENGINE" : "django.db.backends.sqlite3",
-#        "NAME": os.path.join(BASE_DIR, "db.sqlite3")
-#    }
-#}
-
-# we only need the engine name, as heroku takes care of the rest
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE" : "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3")
     }
 }
+
+# we only need the engine name, as heroku takes care of the rest
+#DATABASES = {
+#    "default": {
+#        "ENGINE": "django.db.backends.postgresql_psycopg2",
+#    }
+#}
 
 #DATABASES = {
 #    'default': {
@@ -142,4 +142,4 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-django_heroku.settings(locals())
+#django_heroku.settings(locals())
