@@ -1,4 +1,5 @@
 FROM python:3
+ENV PYTHONUNBUFFERED 1
 RUN mkdir /app
 ADD . /app
 RUN chmod +x /app/entrypoint.sh
