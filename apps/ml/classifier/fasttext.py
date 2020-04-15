@@ -10,7 +10,6 @@ import numpy as np
 import random
 import time
 
-#subprocess.call('cd apps/ml/classifier/fastText && python3 -m pip install -q fasttext && cd ', shell=True)
 import fasttext
 
 class FasttextClassifier:
