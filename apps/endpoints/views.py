@@ -129,6 +129,7 @@ def post_author(request):
     if request.method == "POST":
         form = AuthorForm(request.POST)
         if form.is_valid():
+            request.session['author'] = form.cleaned_data['name']
             post = form.save(commit=False)
             post.published_date = timezone.now()
             post.save()
@@ -138,10 +139,11 @@ def post_author(request):
     return render(request, 'endpoints/post_author.html', {'form': form})
 
 def post_new(request):
-    author=Author.objects.latest('published_date')
+    author=request.session['author']
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
+            request.session['libelle'] = form.cleaned_data['libelle']
             post = form.save(commit=False)
             post.author=author
             post.published_date = timezone.now()
@@ -152,8 +154,8 @@ def post_new(request):
     return render(request, 'endpoints/post_edit.html', {'form': form})
 
 def post_list(request):
-    author=Author.objects.latest('published_date')
-    libelle=Post.objects.latest('published_date')
+    author=request.session['author']
+    libelle=request.session['libelle']
     my_alg = FasttextClassifier()
     prediction = my_alg.compute_prediction({"libelle": str(libelle)})["predictions"]
     df=pd.DataFrame(prediction)
