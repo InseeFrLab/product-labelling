@@ -13,9 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import wget
 
-if os.getenv("model")==None:
-    print("Model must be specified in env variable")
-else :
+if os.getenv("model")!=None:
     wget.download(os.getenv("model"), os.getcwd())
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
