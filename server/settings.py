@@ -79,31 +79,25 @@ WSGI_APPLICATION = "server.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE" : "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3")
+
+if os.getenv("db_type")!="postgres":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv('db_name'),
+            'USER': os.getenv('db_user'),
+            'PASSWORD': os.getenv('db_password'),
+            'HOST': os.getenv('db_host', 'localhost'),
+            'PORT': os.getenv('db_host', '5432'),
+        }
+    }    
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE" : "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3")
+        }
     }
-}
-
-# we only need the engine name, as heroku takes care of the rest
-#DATABASES = {
-#    "default": {
-#        "ENGINE": "django.db.backends.postgresql_psycopg2",
-#    }
-#}
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'myproject',
-#        'USER': 'myprojectuser',
-#        'PASSWORD': 'password',
-#        'HOST': 'localhost',
-#        'PORT': '',
-#    }
-#}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
