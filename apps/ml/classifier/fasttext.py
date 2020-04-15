@@ -15,8 +15,7 @@ import fasttext
 
 class FasttextClassifier:
     def __init__(self):
-        path_to_artifacts = "research/"
-        self.model = fasttext.load_model(path_to_artifacts + "fasttext.bin")
+        self.model = fasttext.load_model("fasttext.bin")
         
     def preprocessing(self, input_data):
         
