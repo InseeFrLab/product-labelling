@@ -2,6 +2,10 @@
 
 ## Deploying to Docker
 
+docker run --env juliedjidji/djangoapp:latest
+
+Spécificier les variables d'env
+onyxia-api
 
 ## Documentation
 
