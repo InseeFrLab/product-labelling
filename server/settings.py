@@ -79,8 +79,7 @@ WSGI_APPLICATION = "server.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-
-if os.getenv("db_type")!="postgres":
+if os.getenv("db_type")=="postgres":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -88,7 +87,7 @@ if os.getenv("db_type")!="postgres":
             'USER': os.getenv('db_user'),
             'PASSWORD': os.getenv('db_password'),
             'HOST': os.getenv('db_host', 'localhost'),
-            'PORT': os.getenv('db_host', '5432'),
+            'PORT': os.getenv('db_port', '5432'),
         }
     }    
 else:
