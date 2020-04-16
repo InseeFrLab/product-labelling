@@ -19,7 +19,7 @@ Product-labelling configuration
 | Key | Default | Description |
 | --------------------- | ------- | ------------------------------------------------------------------ |
 | `model` | `none` | URL of text classification model (must be configured) |
-| `db_type` | `sqlite` | Supported modes are : `postgres` |
+| `db_type` | `sqlite3` | Supported modes are : `postgres` |
 
 Product-labelling configuration if `dbtype`==`postgres`
 | Key | Default | Description |
