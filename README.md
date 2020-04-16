@@ -1,7 +1,6 @@
 # Product labelling
 
-Short description to do
-
+Application for labelling transaction receipts, developed as part of the transaction data project.
 
 ## Quick start
 
