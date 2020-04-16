@@ -5,11 +5,8 @@ class EndpointTests(TestCase):
 
     def test_predict_view(self):
         client = APIClient()
-        input_data = {
-            "libelle": "cahier"
-        }
-        classifier_url = "/api/classifier/predict"
-        response = client.post(classifier_url, input_data, format='json')
+        input_data = "name"
+        test_url = "/post/author"
+        response = client.post(test_url, input_data)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue("request_id" in response.data)
-        self.assertTrue("status" in response.data)
+
