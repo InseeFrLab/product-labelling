@@ -25,21 +25,23 @@
                                 <form method="POST" class="post-form">{% csrf_token %}
                                 {% for pred in predictions %}
                                 <tr>
-                                <td><input type="radio" name="label" id="label{{ pred.label }}" value="{{ pred.label }}" /><label for="label{{ pred.label }}">{{ pred.label }}</label></td>
+                                <td><input type="radio" name="label" id="label{{ pred.label }}" value="{{ pred.label }}" />
+                                    <label for="label{{ pred.label }}">{{ pred.label }}</label>
+                                </td>
                                 <td>{{ pred.prediction }}</td>
                                 </tr>
                                 {% endfor %}
                                 
                                 {% if fichier_nomenclature %}
                                 <tr>
-                                <td><input type="radio" name="label" id="label{{ autre }}" value="{{ autre }}" /><label for="label{{ autre }}">
-                                    <input list="nomenclature" type="text">
-                                    <datalist id="nomenclature">
+                                <td><input type="radio" name="label" id="label-autre" value="" />
+                                    <input id="getselection" name="getselection" list="suggestion" type="text">
+                                    <datalist id="suggestion">
                                     {% for autre in nomenclature %}
-                                    <option value="{{ autre }}">
+                                        <option value="{{ autre }}">
                                     {% endfor %}
                                     </datalist>
-                                </label></td>
+                                </td>
                                 <td></td>
                                 </tr>
                                 {% endif %}
@@ -53,5 +55,13 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            var getvalue=document.getElementsByName('getselection')[0];
+            var val = getvalue.addEventListener('input', function(){
+                document.getElementById('label-autre').value=this.value;
+            })                        
+        </script>
+
     </body>
 </html>

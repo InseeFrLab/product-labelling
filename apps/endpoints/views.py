@@ -70,7 +70,7 @@ def post_list(request):
         post.author=author           
         post.libelle=libelle
         post.label=request.POST['label']
-        if request.POST['label'] in df.label:
+        if request.POST['label'] in list(df.label):
             post.prediction=float(df[df.label==str(request.POST['label'])]["prediction"])
         else:
             post.prediction=float('nan')
