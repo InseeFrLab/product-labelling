@@ -32,15 +32,16 @@
                                 
                                 {% if fichier_nomenclature %}
                                 <tr>
-                                        <td><input type="radio" name="label" id="label{{ autre }}" value="{{ autre }}" /><label for="label{{ autre }}">
-                                            <select >
-                                                    {% for autre in nomenclature %}
-                                                <option value="{{ autre }}">{{ autre }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </label></td>
-                                        <td></td>
-                                    </tr>
+                                <td><input type="radio" name="label" id="label{{ autre }}" value="{{ autre }}" /><label for="label{{ autre }}">
+                                    <input list="nomenclature" type="text">
+                                    <datalist id="nomenclature">
+                                    {% for autre in nomenclature %}
+                                    <option value="{{ autre }}">
+                                    {% endfor %}
+                                    </datalist>
+                                </label></td>
+                                <td></td>
+                                </tr>
                                 {% endif %}
                                 
                                 <button type="submit" class="save btn btn-default">Choisir</button>
