@@ -11,6 +11,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if os.getenv("model")!=None:
     wget.download(os.getenv("model"), os.path.join(BASE_DIR+"/model.bin"))
 
+if (os.getenv("nomenclature")!=None):
+    wget.download(os.getenv("nomenclature"), os.path.join(BASE_DIR+"/nomenclature.csv"))
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '^lw0)9982b8nt^^-t34967jnl(n7iojl!q+!5xojw9mr6u0h9f'
 

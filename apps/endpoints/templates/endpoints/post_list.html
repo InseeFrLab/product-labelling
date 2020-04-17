@@ -29,9 +29,26 @@
                                 <td>{{ pred.prediction }}</td>
                                 </tr>
                                 {% endfor %}
+                                
+                                {% if fichier_nomenclature %}
+                                <tr>
+                                        <td><input type="radio" name="label" id="label{{ autre }}" value="{{ autre }}" /><label for="label{{ autre }}">
+                                            <select >
+                                                    {% for autre in nomenclature %}
+                                                <option value="{{ autre }}">{{ autre }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </label></td>
+                                        <td></td>
+                                    </tr>
+                                {% endif %}
+                                
                                 <button type="submit" class="save btn btn-default">Choisir</button>
                                 </form>
                         </table>
+                        {% if warning %}
+                            <h5 style="color:rgb(255,0,0);"><b><u>Warning</u></b> : Probas faibles pour les libellés prédits par le modèle</h5>
+                        {% endif %}
                 </div>
             </div>
         </div>

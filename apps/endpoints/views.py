@@ -16,6 +16,7 @@ from django.views import generic
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
+import os
 import json
 from numpy.random import rand
 import pandas as pd
@@ -54,6 +55,14 @@ def post_list(request):
     my_alg = FasttextClassifier()
     prediction = my_alg.compute_prediction({"libelle": str(libelle)})["predictions"]
     df=pd.DataFrame(prediction)
+    warning=True
+    if (df['prediction']>0.7).any():
+        warning=False
+    fichier_nomenclature=os.path.exists('nomenclature.csv', header=None)
+    if fichier_nomenclature:
+        nomenclature=pd.read_csv('nomenclature.csv')[0]
+    else:
+        nomenclature=list()
 
     if request.method == "POST":
         form = PredictionForm()
@@ -61,10 +70,13 @@ def post_list(request):
         post.author=author           
         post.libelle=libelle
         post.label=request.POST['label']
-        post.prediction=float(df[df.label==str(request.POST['label'])]["prediction"])
+        if request.POST['label'] in df.label:
+            post.prediction=float(df[df.label==str(request.POST['label'])]["prediction"])
+        else:
+            post.prediction=float('nan')
         post.published_date = timezone.now() 
         post.save()
         return HttpResponseRedirect(reverse('post_new'))
 
-    return render(request, 'endpoints/post_list.html', {'libelle':str(libelle).upper,'predictions':prediction})
+    return render(request, 'endpoints/post_list.html', {'libelle':str(libelle).upper,'predictions':prediction, 'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
 
