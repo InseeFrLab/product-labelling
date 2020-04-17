@@ -58,9 +58,9 @@ def post_list(request):
     warning=True
     if (df['prediction']>0.7).any():
         warning=False
-    fichier_nomenclature=os.path.exists('nomenclature.csv', header=None)
+    fichier_nomenclature=os.path.exists('nomenclature.csv')
     if fichier_nomenclature:
-        nomenclature=pd.read_csv('nomenclature.csv')[0]
+        nomenclature=pd.read_csv('nomenclature.csv', header=None)[0]
     else:
         nomenclature=list()
 
