@@ -18,6 +18,7 @@ Product-labelling configuration
 | Key | Default | Description |
 | --------------------- | ------- | ------------------------------------------------------------------ |
 | `model` | `none` | URL of text classification model (must be configured) |
+| `nomenclature` | `none` | CSV with no header and complete list of nomenclature products |
 | `db_type` | `sqlite3` | Supported modes are : `postgres` |
 
 Product-labelling configuration if `dbtype`==`postgres`
