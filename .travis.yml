@@ -3,12 +3,12 @@ services:
 addons:
   organization: "inseefrlab"
 script:
-  - docker build -t juliedjidji/djangoapp:latest .
+  - docker build -t inseefrlab/product-labelling:latest .
 deploy:
   skip_cleanup: true
   provider: script
   script:
     echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    && docker push juliedjidji/djangoapp:latest
+    && docker push inseefrlab/product-labelling:latest
   on:
     branch: master
