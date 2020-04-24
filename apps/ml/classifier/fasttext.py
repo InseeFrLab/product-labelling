@@ -20,10 +20,28 @@ class FasttextClassifier:
         
         # JSON to pandas DataFrame
         input_data = pd.DataFrame(input_data, index=[0], columns=['libelle'])
-        
-        replace_values_ean = {',' : ' ', '&' : ' ','\+':' ',r'\d+\.?\d*([CM]?[LM]|CT|GR?|KG|X|\*|%)': ' ',r' \d+ ': ' ',r'^\d+ ':''} 
+        input_data['libelle'] = input_data['libelle'].str.upper()
+
+        # Nettoyage 'Description EAN'
+        replace_values_ean = {
+            ',': ' ',
+            '&': ' ',
+            '\+': ' ',
+            r'\s\d+\s': ' ',
+            r'^\d+ ': '',
+            r'\d+\.?\d*(K?GR?)\s': ' #POIDS ',
+            r'\d+\.?\d*(C?MM?)\s': ' #DIMENSION ',
+            r'\d+\.?\d*([CM]?L)\s': ' #VOLUME ',
+            r'\d+\.?\d*(%)\s': ' #POURCENTAGE ',
+            r'\d+\.?\d*(X|\*)\s': ' #LOT ',
+            r'\d+\.?\d*(X)\d\s': ' #LOT ',
+            r'\d+\.?\d*(CT)\s': '#UNITE',
+            r'(\sX?S\s)|(\sM\s)|(\sX?X?L\s)': ' #TAILLE ',
+            r'\d+\/\d+': ' #TAILLE ',
+            '&AMP': ' ',
+        }
         input_data.replace({"libelle": replace_values_ean},regex=True,inplace=True)
-        input_data.replace({"libelle": {r'([ ]{2,})': ' '}}, inplace=True, regex=True)   
+        input_data.replace({"libelle": {r'([ ]{2,})': ' '}}, inplace=True, regex=True) # Suppression des espaces multiples
         input_data=input_data['libelle'][0]
         return input_data.upper()
         
