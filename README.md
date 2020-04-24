@@ -7,7 +7,7 @@ Application for labelling transaction receipts, developed as part of the transac
 ### Using docker
 
 ```
-docker run --env juliedjidji/djangoapp:latest
+docker run --env inseefrlab/product-labelling
 ```
 
 ## Configuration
