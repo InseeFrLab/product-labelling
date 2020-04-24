@@ -19,12 +19,11 @@ class FasttextClassifier:
     def preprocessing(self, input_data):
         
         # JSON to pandas DataFrame
-        input_data = pd.DataFrame(input_data, index=[0])
+        input_data = pd.DataFrame(input_data, index=[0], columns=['libelle'])
         
         replace_values_ean = {',' : ' ', '&' : ' ','\+':' ',r'\d+\.?\d*([CM]?[LM]|CT|GR?|KG|X|\*|%)': ' ',r' \d+ ': ' ',r'^\d+ ':''} 
         input_data.replace({"libelle": replace_values_ean},regex=True,inplace=True)
-        input_data.replace({"libelle": {r'([ ]{2,})': ' '}}, inplace=True, regex=True)
-        #input_data['libelle'].to_csv('predict.txt',header=False,index=False,encoding="utf-8")     
+        input_data.replace({"libelle": {r'([ ]{2,})': ' '}}, inplace=True, regex=True)   
         input_data=input_data['libelle'][0]
         return input_data.upper()
         
