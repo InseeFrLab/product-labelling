@@ -9,7 +9,7 @@ import wget
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 if os.getenv("model")!=None:
-    wget.download(os.getenv("model"), os.path.join(BASE_DIR+"/model.bin"))
+    wget.download(os.getenv("model"), os.path.join(BASE_DIR+"/model.ftz"))
 
 if (os.getenv("nomenclature")!=None):
     wget.download(os.getenv("nomenclature"), os.path.join(BASE_DIR+"/nomenclature.csv"))
