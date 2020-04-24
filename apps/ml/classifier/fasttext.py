@@ -43,7 +43,7 @@ class FasttextClassifier:
         input_data.replace({"libelle": replace_values_ean},regex=True,inplace=True)
         input_data.replace({"libelle": {r'([ ]{2,})': ' '}}, inplace=True, regex=True) # Suppression des espaces multiples
         input_data=input_data['libelle'][0]
-        return input_data.upper()
+        return input_data
         
     def predict(self, input_data):
         res = self.model.predict(input_data, k=3)
