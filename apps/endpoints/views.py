@@ -53,6 +53,7 @@ def post_list(request):
     author=request.session['author']
     libelle=request.session['libelle']
     my_alg = FasttextClassifier()
+    libelle_preprocessed=my_alg.preprocessing({"libelle": str(libelle)})
     prediction = my_alg.compute_prediction({"libelle": str(libelle)})["predictions"]
     df=pd.DataFrame(prediction)
     warning=True
@@ -79,5 +80,5 @@ def post_list(request):
         post.save()
         return HttpResponseRedirect(reverse('post_new'))
 
-    return render(request, 'endpoints/post_list.html', {'libelle':str(libelle).upper,'predictions':prediction, 'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
+    return render(request, 'endpoints/post_list.html', {'libelle':str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')' ,'predictions':prediction, 'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
 
