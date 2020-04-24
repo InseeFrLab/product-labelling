@@ -61,6 +61,7 @@ def post_list(request):
     fichier_nomenclature=os.path.exists('nomenclature.csv')
     if fichier_nomenclature:
         nomenclature=pd.read_csv('nomenclature.csv', header=None)[0]
+        nomenclature=[x.replace('__label__','').replace('_',' ') for x in nomenclature]
     else:
         nomenclature=list()
 
