@@ -19,18 +19,19 @@ class FasttextClassifier:
     def preprocessing(self, input_data):
         # JSON to pandas DataFrame
         input_data = pd.DataFrame(input_data, index=[0], columns=['libelle'])
-        
         # Standardisation du libelle
         replace_accents = {
-                'é': 'e',
-                'è': 'e',
                 'à': 'a',
                 'â': 'a',
+                'é': 'e',
+                'è': 'e',
+                'ï': 'i',
+                'î': 'i',
+                'ô': 'o',
                 'ù': 'u',
                 }
         input_data.replace({"libelle": replace_accents}, regex=True, inplace=True)
         input_data['libelle'] = input_data['libelle'].str.upper()
-
         # Nettoyage du libelle
         replace_values_ean = {
             ',': ' ',
@@ -43,7 +44,7 @@ class FasttextClassifier:
             r'\d+\.?\d*\s?(X|\*)\s?': ' #LOT ',
             r'\d+\.?\d*\s?(X)\d\s?': ' #LOT ',
             r'\d+\.?\d*\s?(CT)\s?': ' #UNITE ',
-            r'(\sX?S\s?)|(\sM\s?)|(\sX*L\s?)': ' #TAILLE ',
+            r'(\sX*S\s?)|(\sM\s?)|(\sX*L\s?)': ' #TAILLE ',
             r'\s\d{2,}\/\d{2,}\s?': ' #TAILLE ',
             '&AMP': ' ',
             r'\s\d+\s': ' ',
