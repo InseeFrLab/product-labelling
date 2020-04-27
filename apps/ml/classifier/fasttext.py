@@ -40,7 +40,7 @@ class FasttextClassifier:
             r'\d+\.?\d*\s?(K?GR?)\b': ' #POIDS ',
             r'\d+\.?\d*\s?(C?MM?)\b': ' #DIMENSION ',
             r'\d+\.?\d*\s?([CM]?L)\b': ' #VOLUME ',
-            r'\d+\.?\d*\s?(%)\b': ' #POURCENTAGE ',
+            r'\d+\.?\d*\s?%': ' #POURCENTAGE ',
             r'\d+\s?(X|\*)\s?\d*\b': ' #LOT ',
             r'\d*\s?(X|\*)\s?\d+\b': ' #LOT ',
             r'\d+\.?\d*\s?(CT)\b': ' #UNITE ',
