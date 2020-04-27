@@ -60,7 +60,7 @@ class FasttextClassifier:
         return res
     
     def postprocessing(self, res):
-        return {"predictions": [{"label":p[0].replace('__label__','').replace('__',' '), "prediction":round(float(p[1]),2)} for p in np.transpose(res)], "status": "OK"}
+        return {"predictions": [{"label":p[0].replace('__label__','').replace('_',' '), "prediction":round(float(p[1]),2)} for p in np.transpose(res)], "status": "OK"}
         #return np.transpose(res)
 
     def compute_prediction(self, input_data):
