@@ -17,7 +17,7 @@ Each variable can be overriden using environment variables.
 Product-labelling configuration
 | Key | Default | Description |
 | --------------------- | ------- | ------------------------------------------------------------------ |
-| `model` | `none` | URL of text classification model (must be configured) |
+| `model` | `none` | URL of text classification model - fasttext model saved with .ftz extension (must be configured) |
 | `nomenclature` | `none` | URL of a CSV file which contains complete list of nomenclature products with no header |
 | `db_type` | `sqlite3` | Supported modes are : `postgres` |
 
