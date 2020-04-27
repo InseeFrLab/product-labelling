@@ -17,31 +17,41 @@ class FasttextClassifier:
         self.model = fasttext.load_model("model.ftz")
         
     def preprocessing(self, input_data):
-        
         # JSON to pandas DataFrame
         input_data = pd.DataFrame(input_data, index=[0], columns=['libelle'])
+        # Standardisation du libelle
+        replace_accents = {
+                'à': 'a',
+                'â': 'a',
+                'é': 'e',
+                'è': 'e',
+                'ï': 'i',
+                'î': 'i',
+                'ô': 'o',
+                'ù': 'u',
+                }
+        input_data.replace({"libelle": replace_accents}, regex=True, inplace=True)
         input_data['libelle'] = input_data['libelle'].str.upper()
-
-        # Nettoyage 'Description EAN'
+        # Nettoyage du libelle
         replace_values_ean = {
             ',': ' ',
             '&': ' ',
             '\+': ' ',
+            r'\d+\.?\d*\s?(K?GR?)\s?': ' #POIDS ',
+            r'\d+\.?\d*\s?(C?MM?)\s?': ' #DIMENSION ',
+            r'\d+\.?\d*\s?([CM]?L)\s?': ' #VOLUME ',
+            r'\d+\.?\d*\s?(%)\s?': ' #POURCENTAGE ',
+            r'\d+\.?\d*\s?(X|\*)\s?': ' #LOT ',
+            r'\d+\.?\d*\s?(X)\d\s?': ' #LOT ',
+            r'\d+\.?\d*\s?(CT)\s?': ' #UNITE ',
+            r'(\sX*S\s?)|(\sM\s?)|(\sX*L\s?)': ' #TAILLE ',
+            r'\s\d{2,}\/\d{2,}\s?': ' #TAILLE ',
+            '&AMP': ' ',
             r'\s\d+\s': ' ',
             r'^\d+ ': '',
-            r'\d+\.?\d*(K?GR?)\s': ' #POIDS ',
-            r'\d+\.?\d*(C?MM?)\s': ' #DIMENSION ',
-            r'\d+\.?\d*([CM]?L)\s': ' #VOLUME ',
-            r'\d+\.?\d*(%)\s': ' #POURCENTAGE ',
-            r'\d+\.?\d*(X|\*)\s': ' #LOT ',
-            r'\d+\.?\d*(X)\d\s': ' #LOT ',
-            r'\d+\.?\d*(CT)\s': '#UNITE',
-            r'(\sX?S\s)|(\sM\s)|(\sX?X?L\s)': ' #TAILLE ',
-            r'\d+\/\d+': ' #TAILLE ',
-            '&AMP': ' ',
-        }
-        input_data.replace({"libelle": replace_values_ean},regex=True,inplace=True)
-        input_data.replace({"libelle": {r'([ ]{2,})': ' '}}, inplace=True, regex=True) # Suppression des espaces multiples
+            }
+        input_data.replace({"libelle": replace_values_ean}, regex=True, inplace=True)
+        input_data.replace({"libelle": {r'([ ]{2,})': ' '}}, regex=True, inplace=True) # Suppression des espaces multiples
         input_data=input_data['libelle'][0]
         return input_data
         
