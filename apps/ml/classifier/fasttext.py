@@ -34,22 +34,23 @@ class FasttextClassifier:
         input_data['libelle'] = input_data['libelle'].str.upper()
         # Nettoyage du libelle
         replace_values_ean = {
-            ',': ' ',
-            '&': ' ',
-            '\+': ' ',
-            r'\d+\.?\d*\s?(K?GR?)\b': ' #POIDS ',
-            r'\d+\.?\d*\s?(C?MM?)\b': ' #DIMENSION ',
-            r'\d+\.?\d*\s?([CM]?L)\b': ' #VOLUME ',
-            r'\d+\.?\d*\s?%': ' #POURCENTAGE ',
-            r'\d+\s?(X|\*)\s?\d*\b': ' #LOT ',
-            r'\d*\s?(X|\*)\s?\d+\b': ' #LOT ',
-            r'\d+\.?\d*\s?(CT)\b': ' #UNITE ',
-            r'(\sX*S\b)|(\sM\b)|(\sX*L\b)': ' #TAILLE ',
-            r'\s\d{2,}\/\d{2,}\b': ' #TAILLE ',
-            '&AMP': ' ',
-            r'\s\d+\b': ' ',
-            r'^\d+ ': '',
-            }
+                '\.': ' ',
+                ',': ' ',
+                '&': ' ',
+                '\+': ' ',
+                r'\d+\.?\d*\s?(K?GR?)\b': ' #POIDS ',
+                r'\d+\.?\d*\s?(C?MM?)\b': ' #DIMENSION ',
+                r'\d+\.?\d*\s?([CM]?L)\b': ' #VOLUME ',
+                r'\d+\.?\d*\s?%': ' #POURCENTAGE ',
+                r'\d+\s?(X|\*)\s?\d*\b': ' #LOT ',
+                r'\d*\s?(X|\*)\s?\d+\b': ' #LOT ',
+                r'\d+\.?\d*\s?(CT)\b': ' #UNITE ',
+                r'(\sX*S\b)|(\sM\b)|(\sX*L\b)': ' #TAILLE ',
+                r'\s\d{2,}\/\d{2,}\b': ' #TAILLE ',
+                '&AMP': ' ',
+                r'\s\d+\b': ' ',
+                r'^\d+ ': '',
+                }
         input_data.replace({"libelle": replace_values_ean}, regex=True, inplace=True)
         input_data.replace({"libelle": {r'([ ]{2,})': ' '}}, regex=True, inplace=True) # Suppression des espaces multiples
         input_data=input_data['libelle'][0]
