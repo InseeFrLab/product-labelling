@@ -4,7 +4,6 @@ psycopg2-binary
 numpy
 pandas
 joblib
-csv
 djangorestframework
 markdown
 django-filter
