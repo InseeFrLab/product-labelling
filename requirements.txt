@@ -4,10 +4,10 @@ psycopg2-binary
 numpy
 pandas
 joblib
+csv
 djangorestframework
 markdown
 django-filter
 pybind11>=2.2
 wget
 git+https://github.com/facebookresearch/fastText.git
-csv
