@@ -51,7 +51,7 @@ class LabellisationManuelle(models.Model):
 class Labellisation(models.Model):
     id = models.AutoField(primary_key=True)
     libelle = models.CharField(max_length=1000)
-    author = models.CharField(blank=True, null=True)
+    author = models.TextField(blank=True, null=True)
     label = models.TextField(blank=True, null=True)
     prediction = models.TextField(blank=True, null=True)
     created_date = models.DateTimeField(blank=True, null=True, default=timezone.now)
