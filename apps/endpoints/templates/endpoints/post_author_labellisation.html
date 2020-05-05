@@ -1,0 +1,29 @@
+{% load static %}
+<html>
+    <head>
+        <title>Labellisation données de caisse</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link href="//fonts.googleapis.com/css?family=Berkshire+Swash&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    </head>
+    <body>
+        <div class="page-header">
+            <a href="{% url 'post_bilanlabellisation' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/bilan">Labellisation des données de caisse</a></h1>
+        </div>
+        
+        <div class="content container">
+            <h3>Quel est votre nom ?</h3>
+            <div class="row">
+                <div class="col-md-8">
+                        <form method="POST" class="post-form">{% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="save btn btn-default">Commencer la labellisation</button>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

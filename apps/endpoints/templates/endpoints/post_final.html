@@ -1,0 +1,27 @@
+{% load static %}
+<html>
+    <head>
+        <title>Labellisation données de caisse</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link href="//fonts.googleapis.com/css?family=Berkshire+Swash&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    </head>
+    <body>
+        <div class="page-header">
+            <a href="{% url 'post_author' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/post/author">Labellisation des données de caisse</a></h1>
+        </div>
+
+        <h3>Fin de labellisation du fichier</h3>
+        <ul>
+            <li>Toutes les observations du fichier ont été labellisées, ie {{ nb_labellise }} labellisations effectuées</li>
+        </ul>
+
+        <h4>Pour continuer à labelliser en fournissant le libellé ... </h4>
+        <form method="POST" class="post-form">{% csrf_token %}
+            <button type="submit" class="save btn btn-default">Poursuivre</button>
+        </form>
+    </body>
+</html>

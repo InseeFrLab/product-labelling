@@ -1,0 +1,33 @@
+{% load static %}
+<html>
+    <head>
+        <title>Labellisation données de caisse</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link href="//fonts.googleapis.com/css?family=Berkshire+Swash&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    </head>
+    <body>
+        <div class="page-header">
+            <a href="{% url 'post_author_labellisation' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/author">Labellisation des données de caisse</a></h1>
+        </div>
+
+        <h3>Bilan d'avancement de la labellisation du fichier</h3>
+        <ul>
+            <li>Nombre total d'observations à labelliser dans le fichier : {{ nb_total }} </li>
+            <li>Nombre d'obervations labellisées : {{ nb_labellise }} </li>
+        </ul>
+        <div class="content container">
+            <div class="row">
+                <div class="col-md-8">
+                    <form method="POST" class="post-form">{% csrf_token %}
+                        <button type="submit" class="save btn btn-default">Poursuivre la labellisation</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    
+    </body>
+</html>

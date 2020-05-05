@@ -1,5 +1,5 @@
 from django import forms
-from apps.endpoints.models import Author, Post, Labellisation
+from apps.endpoints.models import Author, Post, LabellisationManuelle 
 
 class AuthorForm(forms.ModelForm):
 
@@ -15,5 +15,5 @@ class PostForm(forms.ModelForm):
 
 class PredictionForm(forms.ModelForm):
     class Meta:
-        model = Labellisation
+        model = LabellisationManuelle
         fields = ('libelle', 'label', 'prediction',)

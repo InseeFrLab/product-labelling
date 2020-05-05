@@ -10,10 +10,11 @@
     </head>
     <body>
         <div class="page-header">
-            <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
-            <h1><a href="/post/author">Labellisation des données de caisse</a></h1>
+            <a href="{% url 'post_bilanlabellisation' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/bilan">Labellisation des données de caisse</a></h1>
         </div>
-        <div class="content container">
+      
+        <div class="content container" id="divPrediction">
             <div class="row">
                 <div class="col-md-8">
                     <p>Pour le  libellé {{ libelle }} :</p>
@@ -46,13 +47,16 @@
                                 </tr>
                                 {% endif %}
                                 
-                                <button type="submit" class="save btn btn-default">Choisir</button>
+                                <button type="submit" class="save btn btn-default" onclick="addAuthor()">Choisir</button>
                                 </form>
                         </table>
                         {% if warning %}
                             <h5 style="color:rgb(255,0,0);"><b><u>Warning</u></b> : Probas faibles pour les libellés prédits par le modèle</h5>
                         {% endif %}
                 </div>
+                <form method="POST" class="post-form">{% csrf_token %}
+                    <button class="save btn btn-default" name="encours" value=None>Arrêter de labelliser</button>
+                </form>     
             </div>
         </div>
 
@@ -60,7 +64,7 @@
             var getvalue=document.getElementsByName('getselection')[0];
             var val = getvalue.addEventListener('input', function(){
                 document.getElementById('label-autre').value=this.value;
-            })                        
+            })
         </script>
 
     </body>

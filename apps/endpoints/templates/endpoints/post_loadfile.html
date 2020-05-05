@@ -1,0 +1,51 @@
+{% load static %}
+<html>
+    <head>
+        <title>Labellisation données de caisse</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link href="//fonts.googleapis.com/css?family=Berkshire+Swash&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    </head>
+    <body>
+        <div class="page-header">
+            <a href="{% url 'post_author' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/post/author">Labellisation des données de caisse</a></h1>
+        </div>
+
+        <div class="content container">
+            <h3>Chargement du fichier à labelliser</h3>
+            <p>Attention, le fichier téléchargé doit être un csv ou un fichier texte sans titre !</p>
+            <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+                <input type="file" name="myfile">
+
+                <label for="idencoding">Préciser l'encoding : </label>
+                <input type="text" name="encoding" id="idencoding" value='utf-8'><br><br>
+
+                <label for="idseparator">Préciser le séparateur : </label>
+                <input type="text" name="separator" id="idseparator" value=","><br><br>
+
+                <button type="submit">Charger le fichier</button>
+            </form>
+        </div>
+
+        {% if uploaded_file_url %}
+            <div class="content container">  
+                <h4><a href="{{ uploaded_file_url }}"></a>Voici le fichier téléchargé: </h4>
+                <p>Le fichier téléchargé contient {{ nb_lines }} observations dont voici les premières observations :</p>
+                <table border="1" width="600">
+                    <tr>
+                    <td align="center"><B>Libellé</B></td>
+                    </tr>
+                    {% for row in first_lines %}
+                    <tr> <td>{{ row }}</td> </tr>
+                    {% endfor %}
+                </table>
+
+                <h3><a href="{% url 'post_author_labellisation' %}">Commencer à labelliser</a></h3>
+            </div>
+        {% endif %}
+        
+    </body>
+</html>
