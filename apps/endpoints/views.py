@@ -154,7 +154,7 @@ def post_labellisation(request):
             entry.save()
             return HttpResponseRedirect(reverse('post_bilanlabellisation'))
 
-    if clean=True:
+    if clean==True:
         request.session['postedlibelle']=libelle
     return render(request, 'endpoints/post_labellisation.html', {'libelle':str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')' ,
         'predictions':prediction, 'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
