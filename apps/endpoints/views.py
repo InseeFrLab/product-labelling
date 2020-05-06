@@ -93,16 +93,24 @@ def post_author_labellisation(request):
         form = AuthorForm()
     return render(request, 'endpoints/post_author_labellisation.html', {'form': form})
 
+
 def post_labellisation(request):
     author=request.session['author']
     libelle=Labellisation.objects.values('libelle').exclude(encours=True).first()
     if libelle==None:
-        return HttpResponseRedirect(reverse('post_final'))
+        clean=False
+        if 'postedlibelle' in request.session :
+            postedlibelle=request.session['postedlibelle']
+            if Labellisation.objects.filter(libelle=postedlibelle).values('labellise').first()['labellise']==True:
+                return HttpResponseRedirect(reverse('post_final'))
+        else:
+            return HttpResponseRedirect(reverse('post_final'))
     else :
         libelle=str(libelle['libelle'])
         entry = Labellisation.objects.get(libelle=libelle)
         entry.encours = True
         entry.save()
+        clean=True
         
         my_alg = FasttextClassifier()
         libelle_preprocessed=my_alg.preprocessing({"libelle": str(libelle)})
@@ -118,34 +126,36 @@ def post_labellisation(request):
         else:
             nomenclature=list()
 
-        if request.method == "POST":
+    if request.method == "POST":
+        if clean==True:
             entry = Labellisation.objects.get(libelle=libelle)
             entry.encours = None
             entry.save()
-            if 'label' in request.POST:
-                postedlibelle=request.session['postedlibelle']
-                my_alg = FasttextClassifier()
-                prediction = my_alg.compute_prediction({"libelle": str(postedlibelle)})["predictions"]
-                posteddf=pd.DataFrame(prediction)               
-                entry = Labellisation.objects.get(libelle=postedlibelle)
-                entry.labellise=True 
-                entry.author=author
-                entry.label=request.POST['label']
-                if request.POST['label'] in list(posteddf.label):
-                    entry.prediction=float(posteddf[posteddf.label==str(request.POST['label'])]["prediction"])
-                else:
-                    entry.prediction=float('nan')
-                entry.published_date = timezone.now() 
-                entry.save()
-                return HttpResponseRedirect(reverse('post_labellisation'))
-            if 'encours' in request.POST:
-                postedlibelle=request.session['postedlibelle']
-                entry = Labellisation.objects.get(libelle=postedlibelle)
-                entry.encours = None
-                entry.save()
-                return HttpResponseRedirect(reverse('post_bilanlabellisation'))
+        if 'label' in request.POST:
+            postedlibelle=request.session['postedlibelle']
+            my_alg = FasttextClassifier()
+            prediction = my_alg.compute_prediction({"libelle": str(postedlibelle)})["predictions"]
+            posteddf=pd.DataFrame(prediction)               
+            entry = Labellisation.objects.get(libelle=postedlibelle)
+            entry.labellise=True 
+            entry.author=author
+            entry.label=request.POST['label']
+            if request.POST['label'] in list(posteddf.label):
+                entry.prediction=float(posteddf[posteddf.label==str(request.POST['label'])]["prediction"])
+            else:
+                entry.prediction=float('nan')
+            entry.published_date = timezone.now() 
+            entry.save()
+            return HttpResponseRedirect(reverse('post_labellisation'))
+        if 'encours' in request.POST:
+            postedlibelle=request.session['postedlibelle']
+            entry = Labellisation.objects.get(libelle=postedlibelle)
+            entry.encours = None
+            entry.save()
+            return HttpResponseRedirect(reverse('post_bilanlabellisation'))
 
-    request.session['postedlibelle']=libelle
+    if clean=True:
+        request.session['postedlibelle']=libelle
     return render(request, 'endpoints/post_labellisation.html', {'libelle':str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')' ,
         'predictions':prediction, 'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
 
