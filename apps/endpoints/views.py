@@ -119,8 +119,12 @@ def post_labellisation(request):
             nomenclature=list()
 
         if request.method == "POST":
+            entry = Labellisation.objects.get(libelle=libelle)
+            entry.encours = None
+            entry.save()
             if 'label' in request.POST:
-                entry = Labellisation.objects.get(libelle=libelle)
+                postedlibelle=request.session['postedlibelle']
+                entry = Labellisation.objects.get(libelle=postedlibelle)
                 entry.labellise=True 
                 entry.author=author
                 entry.label=request.POST['label']
@@ -132,11 +136,9 @@ def post_labellisation(request):
                 entry.save()
                 return HttpResponseRedirect(reverse('post_labellisation'))
             if 'encours' in request.POST:
-                entry = Labellisation.objects.get(libelle=libelle)
-                entry.encours = None
-                entry.save()
                 return HttpResponseRedirect(reverse('post_bilanlabellisation'))
 
+    request.session['postedlibelle']=libelle
     return render(request, 'endpoints/post_labellisation.html', {'libelle':str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')' ,
         'predictions':prediction, 'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
 
