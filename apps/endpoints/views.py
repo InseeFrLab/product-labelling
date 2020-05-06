@@ -124,7 +124,6 @@ def post_labellisation(request):
             entry.save()
             if 'label' in request.POST:
                 postedlibelle=request.session['postedlibelle']
-                posteddf=request.session['posteddf']
                 my_alg = FasttextClassifier()
                 prediction = my_alg.compute_prediction({"libelle": str(postedlibelle)})["predictions"]
                 posteddf=pd.DataFrame(prediction)               
