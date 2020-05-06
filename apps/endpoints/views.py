@@ -161,7 +161,7 @@ def post_labellisation(request):
     if ean==None:
         affichage=str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')'
     else:
-        affichage=str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')'+'avec pour EAN'+str(ean['ean'])
+        affichage=str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+') avec pour EAN '+str(ean['ean'])
             
     return render(request, 'endpoints/post_labellisation.html', {'libelle': affichage, 'predictions':prediction, 
             'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
