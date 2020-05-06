@@ -125,6 +125,9 @@ def post_labellisation(request):
             if 'label' in request.POST:
                 postedlibelle=request.session['postedlibelle']
                 posteddf=request.session['posteddf']
+                my_alg = FasttextClassifier()
+                prediction = my_alg.compute_prediction({"libelle": str(postedlibelle)})["predictions"]
+                posteddf=pd.DataFrame(prediction)               
                 entry = Labellisation.objects.get(libelle=postedlibelle)
                 entry.labellise=True 
                 entry.author=author
@@ -144,7 +147,6 @@ def post_labellisation(request):
                 return HttpResponseRedirect(reverse('post_bilanlabellisation'))
 
     request.session['postedlibelle']=libelle
-    request.session['posteddf']=df
     return render(request, 'endpoints/post_labellisation.html', {'libelle':str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')' ,
         'predictions':prediction, 'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
 
