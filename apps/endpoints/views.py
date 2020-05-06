@@ -156,8 +156,15 @@ def post_labellisation(request):
 
     if clean==True:
         request.session['postedlibelle']=libelle
-    return render(request, 'endpoints/post_labellisation.html', {'libelle':str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')' ,
-        'predictions':prediction, 'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
+    
+    ean=Labellisation.objects.filter(libelle=libelle).values('ean').first()
+    if ean==None:
+        affichage=str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')'
+    else:
+        affichage=str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')'+'avec pour EAN'+str(ean['ean'])
+            
+    return render(request, 'endpoints/post_labellisation.html', {'libelle': affichage, 'predictions':prediction, 
+            'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
 
 def post_bilanlabellisation(request):
     nb_labellise=Labellisation.objects.filter(labellise=True).count()
