@@ -136,6 +136,9 @@ def post_labellisation(request):
                 entry.save()
                 return HttpResponseRedirect(reverse('post_labellisation'))
             if 'encours' in request.POST:
+                entry = Labellisation.objects.get(libelle=postedlibelle)
+                entry.encours = None
+                entry.save()
                 return HttpResponseRedirect(reverse('post_bilanlabellisation'))
 
     request.session['postedlibelle']=libelle
