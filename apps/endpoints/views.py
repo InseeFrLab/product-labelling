@@ -124,12 +124,13 @@ def post_labellisation(request):
             entry.save()
             if 'label' in request.POST:
                 postedlibelle=request.session['postedlibelle']
+                posteddf=request.session['posteddf']
                 entry = Labellisation.objects.get(libelle=postedlibelle)
                 entry.labellise=True 
                 entry.author=author
                 entry.label=request.POST['label']
-                if request.POST['label'] in list(df.label):
-                    entry.prediction=float(df[df.label==str(request.POST['label'])]["prediction"])
+                if request.POST['label'] in list(posteddf.label):
+                    entry.prediction=float(posteddf[posteddf.label==str(request.POST['label'])]["prediction"])
                 else:
                     entry.prediction=float('nan')
                 entry.published_date = timezone.now() 
@@ -143,6 +144,7 @@ def post_labellisation(request):
                 return HttpResponseRedirect(reverse('post_bilanlabellisation'))
 
     request.session['postedlibelle']=libelle
+    request.session['posteddf']=df
     return render(request, 'endpoints/post_labellisation.html', {'libelle':str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')' ,
         'predictions':prediction, 'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
 
