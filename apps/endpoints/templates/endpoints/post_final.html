@@ -14,14 +14,16 @@
             <h1><a href="/post/author">Labellisation des données de caisse</a></h1>
         </div>
 
-        <h3>Fin de labellisation du fichier</h3>
-        <ul>
-            <li>Toutes les observations du fichier ont été labellisées, ie {{ nb_labellise }} labellisations effectuées</li>
-        </ul>
+        <div class="content container">
+            <h3>Fin de labellisation du fichier</h3>
+            <ul>
+                <li>Toutes les observations du fichier ont été labellisées, ie {{ nb_labellise }} labellisations effectuées</li>
+            </ul>
 
-        <h4>Pour continuer à labelliser en fournissant le libellé ... </h4>
-        <form method="POST" class="post-form">{% csrf_token %}
-            <button type="submit" class="save btn btn-default">Poursuivre</button>
-        </form>
+            <h4>Pour continuer à labelliser en fournissant le libellé ... </h4>
+            <form method="POST" class="post-form">{% csrf_token %}
+                <button type="submit" class="save btn btn-default">Poursuivre</button>
+            </form>
+        </div>
     </body>
 </html>
