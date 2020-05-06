@@ -15,15 +15,19 @@
         </div>
 
         <div class="content container">
-            <h3>Fin de labellisation du fichier</h3>
-            <ul>
-                <li>Toutes les observations du fichier ont été labellisées, ie {{ nb_labellise }} labellisations effectuées</li>
-            </ul>
+            <div class="row">
+                <div class="col-md-8">
+                <h3>Fin de labellisation du fichier</h3>
+                <ul>
+                    <li>Toutes les observations du fichier ont été labellisées, ie {{ nb_labellise }} labellisations effectuées</li>
+                </ul>
 
-            <h4>Pour continuer à labelliser en fournissant le libellé ... </h4>
-            <form method="POST" class="post-form">{% csrf_token %}
-                <button type="submit" class="save btn btn-default">Poursuivre</button>
-            </form>
+                <h4>Pour continuer à labelliser en fournissant le libellé ... </h4>
+                <form method="POST" class="post-form">{% csrf_token %}
+                    <button type="submit" class="save btn btn-default">Poursuivre</button>
+                </form>
+                </div>
+            </div>
         </div>
     </body>
 </html>
