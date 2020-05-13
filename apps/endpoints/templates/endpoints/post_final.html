@@ -19,12 +19,39 @@
                 <div class="col-md-8">
                 <h3>Fin de labellisation du fichier</h3>
                 <ul>
-                    <li>Toutes les observations du fichier ont été labellisées, ie {{ nb_labellise }} labellisations effectuées</li>
+                    <li>Nombre total d'observations à labelliser dans le fichier : {{ nb_total }} </li>
+                     <li>Nombre d'obervations labellisées : {{ nb_labellise }} </li>
                 </ul>
+        
+                <table border="1" width="600">
+                    <tr>
+                        <td align="center"><B>Groupe</B></td>
+                        <td align="center"><B>Nombre de labellisés</B></td>
+                        <td align="center"><B>Nombre de "je ne sais pas"</B></td>
+                        <td align="center"><B>Nombre total</B></td>
+                    </tr>
+                    {% for row in resbygroup %}
+                    <tr> 
+                        <td>{{ row.groupe }}</td> 
+                        <td>{{ row.labellise }}</td> 
+                        <td>{{ row.attente }}</td> 
+                        <td>{{ row.total }}</td> 
+                    </tr>
+                    {% endfor %}
+                </table>
+                </div>
+            </div>
 
-                <h4>Pour continuer à labelliser en fournissant le libellé ... </h4>
+            <div class="row">
+                <div class="col-md-6">         
                 <form method="POST" class="post-form">{% csrf_token %}
-                    <button type="submit" class="save btn btn-default">Poursuivre</button>
+                    <p class="sep"><label for="attente"><h4>Pour permettre de labelliser à nouveau les produits taggés comme "je ne sais pas": </h4></label>
+                    <button type="submit" class="save btn btn-default" name="attente" value=None>Re-labelliser</button></p>
+                </form>
+
+                <form method="POST" class="post-form">{% csrf_token %}
+                    <p class="sep"><label for="labellisationmanuelle"><h4>Pour continuer à labelliser en fournissant le libellé ... </h4></label>
+                    <button type="submit" class="save btn btn-default" name="labellisationmanuelle" value=None>Poursuivre</button></p>
                 </form>
                 </div>
             </div>

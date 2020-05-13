@@ -8,6 +8,7 @@ from apps.endpoints.forms import AuthorForm, PostForm, PredictionForm
 from apps.endpoints.models import Author, Post, LabellisationManuelle, Labellisation
 
 from django.db import transaction
+from django.db.models import Count
 from django.utils import timezone
 from django.shortcuts import render
 from django.shortcuts import redirect, get_object_or_404
@@ -88,23 +89,32 @@ def post_author_labellisation(request):
         if form.is_valid():
             request.session['author'] = form.cleaned_data['name']
             post = form.save(commit=False)
-            return HttpResponseRedirect(reverse('post_labellisation'))
+            return HttpResponseRedirect(reverse('post_groupChoice_labellisation'))
     else:
         form = AuthorForm()
     return render(request, 'endpoints/post_author_labellisation.html', {'form': form})
 
+def post_groupChoice_labellisation(request):
+    groupes=list(Labellisation.objects.exclude(labellise=True).exclude(enattente=True).values_list('groupe', flat=True).distinct())
+    if groupes==list():
+            return HttpResponseRedirect(reverse('post_final'))
+    if request.method == "POST":
+        request.session['groupselected']=request.POST['groupselected']
+        return HttpResponseRedirect(reverse('post_labellisation'))
+    return render(request, 'endpoints/post_groupChoice_labellisation.html', {'groupes': groupes})
 
 def post_labellisation(request):
     author=request.session['author']
-    libelle=Labellisation.objects.values('libelle').exclude(encours=True).first()
+    groupselected=request.session['groupselected']
+    libelle=Labellisation.objects.values('libelle').exclude(encours=True).exclude(enattente=True).filter(groupe=groupselected).first()
     if libelle==None:
         clean=False
         if 'postedlibelle' in request.session :
             postedlibelle=request.session['postedlibelle']
             if Labellisation.objects.filter(libelle=postedlibelle).values('labellise').first()['labellise']==True:
-                return HttpResponseRedirect(reverse('post_final'))
-        else:
-            return HttpResponseRedirect(reverse('post_final'))
+                return HttpResponseRedirect(reverse('post_groupChoice_labellisation'))
+        if 'postedlibelle' not in request.session :
+            return HttpResponseRedirect(reverse('post_groupChoice_labellisation'))
     else :
         libelle=str(libelle['libelle'])
         entry = Labellisation.objects.get(libelle=libelle)
@@ -153,12 +163,22 @@ def post_labellisation(request):
             entry.encours = None
             entry.save()
             return HttpResponseRedirect(reverse('post_bilanlabellisation'))
+        if 'enattente' in request.POST:
+            postedlibelle=request.session['postedlibelle']
+            entry = Labellisation.objects.get(libelle=postedlibelle)
+            entry.enattente = True
+            entry.encours = None
+            entry.save()
+            if libelle==None:
+                return HttpResponseRedirect(reverse('post_bilanlabellisation'))
+            else:
+                return HttpResponseRedirect(reverse('post_labellisation'))
 
     if clean==True:
         request.session['postedlibelle']=libelle
     
     ean=Labellisation.objects.filter(libelle=libelle).values('ean').first()
-    if ean==None:
+    if ean['ean']==None:
         affichage=str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')'
     else:
         affichage=str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+') avec pour EAN '+str(ean['ean'])
@@ -169,33 +189,37 @@ def post_labellisation(request):
 def post_bilanlabellisation(request):
     nb_labellise=Labellisation.objects.filter(labellise=True).count()
     nb_total=Labellisation.objects.count()
+
+    total=list(Labellisation.objects.all().values('groupe').annotate(total=Count('groupe')))            
+    attente=list(Labellisation.objects.all().filter(enattente=True).values('groupe').annotate(attente=Count('groupe')))                                                                                     
+    labellise=list(Labellisation.objects.all().filter(labellise=True).values('groupe').annotate(labellise=Count('groupe'))) 
+    total.extend(attente)
+    total.extend(labellise)
+    resbygroup=pd.DataFrame(total)
+    resbygroup=resbygroup.groupby('groupe').max().fillna(0).astype(int).reset_index().to_dict('records')  
+
     if request.method == "POST":
         return HttpResponseRedirect(reverse('post_author_labellisation'))
-    return render(request, 'endpoints/post_bilanlabellisation.html', {'nb_labellise':nb_labellise, 'nb_total':nb_total})
+    return render(request, 'endpoints/post_bilanlabellisation.html', {'nb_labellise':nb_labellise, 'nb_total':nb_total,
+        'resbygroup':resbygroup})
 
 def post_final(request):
-    nb_labellise=Labellisation.objects.filter(labellise=True).count() 
+    nb_labellise=Labellisation.objects.filter(labellise=True).count()
+    nb_total=Labellisation.objects.count()
+
+    total=list(Labellisation.objects.all().values('groupe').annotate(total=Count('groupe')))            
+    attente=list(Labellisation.objects.all().filter(enattente=True).values('groupe').annotate(attente=Count('groupe')))                                                                                     
+    labellise=list(Labellisation.objects.all().filter(labellise=True).values('groupe').annotate(labellise=Count('groupe'))) 
+    total.extend(attente)
+    total.extend(labellise)
+    resbygroup=pd.DataFrame(total)
+    resbygroup=resbygroup.groupby('groupe').max().fillna(0).astype(int).reset_index().to_dict('records')  
+
     if request.method == "POST":
-        return HttpResponseRedirect(reverse('post_libelle'))
-    return render(request, 'endpoints/post_final.html', {'nb_labellise':nb_labellise})
-
-def post_loadfile(request):
-    if request.method == 'POST' and request.FILES['myfile']:
-        myfile = request.FILES['myfile']
-        fs = FileSystemStorage()
-        filename = fs.save(myfile.name, myfile)
-        uploaded_file_url = fs.url(filename)
-
-        nb_lines=0
-        first_lines=[]
-        with open(os.path.join(settings.MEDIA_ROOT,filename), 'r', encoding=request.POST['encoding']) as file:
-            reader = csv.reader(file, delimiter=request.POST['separator'])
-            for row in reader:
-                libelle = Labellisation(libelle=row[0])
-                libelle.save()
-                nb_lines+=1
-                if nb_lines<4:
-                    first_lines.append(row[0])
-
-        return render(request, 'endpoints/post_loadfile.html', {'uploaded_file_url': uploaded_file_url, 'first_lines':first_lines, 'nb_lines':nb_lines})
-    return render(request, 'endpoints/post_loadfile.html')
+        if 'attente' in request.POST:
+            reinit=Labellisation.objects.all().filter(enattente=True).values('enattente')   
+            reinit.update(enattente=False)                        
+            return HttpResponseRedirect(reverse('post_groupChoice_labellisation'))
+        if 'labellisationmanuelle' in request.POST:
+            return HttpResponseRedirect(reverse('post_libelle'))
+    return render(request, 'endpoints/post_final.html', {'nb_labellise':nb_labellise, 'nb_total':nb_total, 'resbygroup':resbygroup})

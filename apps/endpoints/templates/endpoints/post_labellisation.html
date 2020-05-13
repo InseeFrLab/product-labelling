@@ -47,17 +47,25 @@
                                 </tr>
                                 {% endif %}
                                 
-                                <button type="submit" class="save btn btn-default" onclick="addAuthor()">Choisir</button>
+                                <button type="submit" class="save btn btn-default">Choisir</button>
                                 </form>
                         </table>
                         {% if warning %}
                             <h5 style="color:rgb(255,0,0);"><b><u>Warning</u></b> : Probas faibles pour les libellés prédits par le modèle</h5>
                         {% endif %}
+
+                        <div class="row">
+                            <form method="POST" class="post-form">{% csrf_token %}
+                                <p><button class="save btn btn-default" name="enattente" value=None>Je ne sais pas</button></p>
+                            </form>
+                        </div>
+                        <div class="row">
+                            <form method="POST" class="post-form">{% csrf_token %}
+                                <p class="sep"><button class="save btn btn-default" name="encours" value=None>Arrêter de labelliser</button></p>
+                            </form> 
+                        </div>
                 </div>
-                <form method="POST" class="post-form">{% csrf_token %}
-                    <button class="save btn btn-default" name="encours" value=None>Arrêter de labelliser</button>
-                </form>     
-            </div>
+            </div>            
         </div>
 
         <script>

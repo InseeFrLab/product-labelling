@@ -55,10 +55,11 @@ class Labellisation(models.Model):
     label = models.TextField(blank=True, null=True)
     prediction = models.TextField(blank=True, null=True)
     ean = models.TextField(blank=True, null=True)
-    created_date = models.DateTimeField(blank=True, null=True, default=timezone.now)
+    groupe = models.TextField(blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
     encours = models.BooleanField(blank=True, null=True)
     labellise = models.BooleanField(blank=True, null=True)
+    enattente = models.BooleanField(blank=True, null=True)
 
     def publish(self):
         self.published_date = timezone.now()

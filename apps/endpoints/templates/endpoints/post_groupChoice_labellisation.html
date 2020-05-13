@@ -15,34 +15,17 @@
         </div>
 
         <div class="content container">
-            <h3>Bilan d'avancement de la labellisation du fichier</h3>
-            <ul>
-                <li>Nombre total d'observations à labelliser dans le fichier : {{ nb_total }} </li>
-                <li>Nombre d'obervations labellisées : {{ nb_labellise }} </li>
-            </ul>
-
-            <table border="1" width="600">
-                    <tr>
-                        <td align="center"><B>Groupe</B></td>
-                        <td align="center"><B>Nombre de labellisés</B></td>
-                        <td align="center"><B>Nombre de "je ne sais pas"</B></td>
-                        <td align="center"><B>Nombre total</B></td>
-                    </tr>
-                    {% for row in resbygroup %}
-                    <tr> 
-                        <td>{{ row.groupe }}</td> 
-                        <td>{{ row.labellise }}</td> 
-                        <td>{{ row.attente }}</td> 
-                        <td>{{ row.total }}</td> 
-                    </tr>
-                    {% endfor %}
-            </table>
-            
-            <p class="sep"></p>
+            <h3>Choix du groupe à labelliser</h3>
             <div class="row">
                 <div class="col-md-8">
                     <form method="POST" class="post-form">{% csrf_token %}
-                            <button type="submit" class="save btn btn-default">Poursuivre la labellisation</button>
+                        <input list="suggestion" type="text" name="groupselected" id="groupselected">
+                        <datalist id="suggestion">
+                            {% for gr in groupes %}
+                                <option value="{{ gr }}">
+                            {% endfor %}
+                        </datalist>
+                        <button type="submit" class="save btn btn-default">Commencer la labellisation de ce groupe</button>
                     </form>
                 </div>
             </div>
