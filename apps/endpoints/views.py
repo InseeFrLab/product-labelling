@@ -106,18 +106,18 @@ def post_groupChoice_labellisation(request):
 def post_labellisation(request):
     author=request.session['author']
     groupselected=request.session['groupselected']
-    libelle=Labellisation.objects.values('libelle').exclude(encours=True).exclude(enattente=True).filter(groupe=groupselected).first()
+    libelle=Labellisation.objects.filter(groupe=groupselected).values('libelle').exclude(encours=True).exclude(enattente=True).first()
     if libelle==None:
         clean=False
         if 'postedlibelle' in request.session :
             postedlibelle=request.session['postedlibelle']
-            if Labellisation.objects.filter(libelle=postedlibelle).values('labellise').first()['labellise']==True:
+            if Labellisation.objects.filter(groupe=groupselected).filter(libelle=postedlibelle).values('labellise').first()['labellise']==True:
                 return HttpResponseRedirect(reverse('post_groupChoice_labellisation'))
         if 'postedlibelle' not in request.session :
             return HttpResponseRedirect(reverse('post_groupChoice_labellisation'))
     else :
         libelle=str(libelle['libelle'])
-        entry = Labellisation.objects.get(libelle=libelle)
+        entry = Labellisation.objects.filter(groupe=groupselected).get(libelle=libelle)
         entry.encours = True
         entry.save()
         clean=True
@@ -138,7 +138,7 @@ def post_labellisation(request):
 
     if request.method == "POST":
         if clean==True:
-            entry = Labellisation.objects.get(libelle=libelle)
+            entry = Labellisation.objects.filter(groupe=groupselected).get(libelle=libelle)
             entry.encours = None
             entry.save()
         if 'label' in request.POST:
@@ -146,7 +146,7 @@ def post_labellisation(request):
             my_alg = FasttextClassifier()
             prediction = my_alg.compute_prediction({"libelle": str(postedlibelle)})["predictions"]
             posteddf=pd.DataFrame(prediction)               
-            entry = Labellisation.objects.get(libelle=postedlibelle)
+            entry = Labellisation.objects.filter(groupe=groupselected).get(libelle=postedlibelle)
             entry.labellise=True 
             entry.author=author
             entry.label=request.POST['label']
@@ -159,13 +159,13 @@ def post_labellisation(request):
             return HttpResponseRedirect(reverse('post_labellisation'))
         if 'encours' in request.POST:
             postedlibelle=request.session['postedlibelle']
-            entry = Labellisation.objects.get(libelle=postedlibelle)
+            entry = Labellisation.objects.filter(groupe=groupselected).get(libelle=postedlibelle)
             entry.encours = None
             entry.save()
             return HttpResponseRedirect(reverse('post_bilanlabellisation'))
         if 'enattente' in request.POST:
             postedlibelle=request.session['postedlibelle']
-            entry = Labellisation.objects.get(libelle=postedlibelle)
+            entry = Labellisation.objects.filter(groupe=groupselected).get(libelle=postedlibelle)
             entry.enattente = True
             entry.encours = None
             entry.save()
@@ -177,7 +177,7 @@ def post_labellisation(request):
     if clean==True:
         request.session['postedlibelle']=libelle
     
-    ean=Labellisation.objects.filter(libelle=libelle).values('ean').first()
+    ean=Labellisation.objects.filter(groupe=groupselected).filter(libelle=libelle).values('ean').first()
     if ean['ean']==None:
         affichage=str(libelle)+' (transformé par preprocessing en : '+str(libelle_preprocessed)+')'
     else:
