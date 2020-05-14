@@ -4,8 +4,8 @@ Application for labelling transaction receipts, developed as part of the transac
 
 The application includes two parts :
 
-* The first one enables users to visualize the results (preprocessing and predictions of the model). Access to this functionality through the link ~/post/author
-* The second one available at ~/author aims at easing the labelling process. 
+* The first one enables users to visualize the results (preprocessing and predictions of the model). The access to this functionality is through the link ~/post/author
+* The second one available at ~/author aims at simplifying the labelling process.
 
 ## Quick start
 
