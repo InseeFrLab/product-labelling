@@ -1,6 +1,6 @@
 # Product labelling
 
-Application for labelling transaction receipts, developed as part of the transaction data project. Predictions are made using fastText algorithm.
+Application for labelling transaction receipts, developed as part of the transaction data project. Predictions are made using the fastText algorithm.
 
 The application includes two parts :
 
