@@ -8,5 +8,6 @@ djangorestframework
 markdown
 django-filter
 pybind11>=2.2
+s3fs
 wget
 git+https://github.com/facebookresearch/fastText.git
