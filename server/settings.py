@@ -8,14 +8,16 @@ import wget
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-if os.getenv("model")!=None:
-    wget.download(os.getenv("model"), os.path.join(BASE_DIR+"/model.ftz"))
-
-if (os.getenv("nomenclature")!=None):
-    wget.download(os.getenv("nomenclature"), os.path.join(BASE_DIR+"/nomenclature.csv"))
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^lw0)9982b8nt^^-t34967jnl(n7iojl!q+!5xojw9mr6u0h9f'
+# Import of model and nomenclature from s3 if specified, if not download from url, or if not local availability is required
+if os.getenv("s3_endpoint")!=None:
+    fs = s3fs.S3FileSystem(client_kwargs={'endpoint_url': os.getenv("s3_endpoint")},key= os.getenv("s3_access_key"), secret=os.getenv("s3_secret_key")) 
+    fs.get(os.getenv("nomenclature"), os.path.join(BASE_DIR+"/nomenclature.csv"))
+    fs.get(os.getenv("model"), os.path.join(BASE_DIR+"/model.ftz"))
+else:	
+    if os.getenv("model")!=None:
+    	wget.download(os.getenv("model"), os.path.join(BASE_DIR+"/model.ftz"))
+    if (os.getenv("nomenclature")!=None):
+        wget.download(os.getenv("nomenclature"), os.path.join(BASE_DIR+"/nomenclature.csv"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
