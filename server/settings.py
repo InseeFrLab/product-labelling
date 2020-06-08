@@ -3,6 +3,7 @@ Django settings
 """
 
 import os
+import s3fs
 import wget
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
