@@ -13,7 +13,7 @@ SECRET_KEY = "toto"
 
 # Import of model and nomenclature from s3 if specified, if not download from url, or if not local availability is required
 if os.getenv("s3_endpoint")!=None:
-    fs = s3fs.S3FileSystem(client_kwargs={'endpoint_url': os.getenv("s3_endpoint")},key= os.getenv("s3_access_key"), secret=os.getenv("s3_secret_key")) 
+    fs = s3fs.S3FileSystem(client_kwargs={'endpoint_url': os.getenv("s3_endpoint")}, key= os.getenv("s3_access_key"), secret=os.getenv("s3_secret_key")) 
     fs.get(os.getenv("nomenclature"), os.path.join(BASE_DIR+"/nomenclature.csv"))
     fs.get(os.getenv("model"), os.path.join(BASE_DIR+"/model.ftz"))
 else:	
