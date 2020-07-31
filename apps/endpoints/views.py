@@ -103,15 +103,30 @@ def labeling_author(request):
         if form.is_valid():
             request.session['author'] = form.cleaned_data['name']
             post = form.save(commit=False)
-            return HttpResponseRedirect(reverse('labeling_groupChoice'))
+            return HttpResponseRedirect(reverse('labeling_tableChoice'))
     else:
         form = AuthorForm()
     return render(request, 'endpoints/labeling_author.html', {'form': form})
 
-def labeling_groupChoice(request, nb_labelingtodo_bylabel=nb_labelingtodo_bylabel):
+def labeling_tableChoice(request, nb_labelingtodo_bylabel=nb_labelingtodo_bylabel):
     author=request.session['author']
     idDone=list(LabelingDone.objects.filter(author=author).values_list('id_label', flat=True))
-    groups=list(LabelingToDo.objects.exclude(id__in=idDone).annotate(nb=F('labeled')+F('ongoing')).filter(nb__lt=nb_labelingtodo_bylabel).values_list('categ', flat=True).distinct())
+    tables=LabelingToDo.objects.exclude(id__in=idDone).annotate(nb=F('labeled')+F('ongoing')).filter(nb__lt=nb_labelingtodo_bylabel).values_list('tableName', flat=True).distinct()
+    if tables==list():
+        return HttpResponseRedirect(reverse('labeling_final'))
+    if request.method == "POST":
+        if request.POST['tableselected'] in tables:
+            request.session['tableselected']=request.POST['tableselected']
+            return HttpResponseRedirect(reverse('labeling_groupChoice'))
+        else:
+            return HttpResponseRedirect(reverse('labeling_tableChoice'))
+    return render(request, 'endpoints/labeling_tableChoice.html', {'tables': tables})
+
+def labeling_groupChoice(request, nb_labelingtodo_bylabel=nb_labelingtodo_bylabel):
+    author=request.session['author']
+    tableselected=request.session['tableselected']
+    idDone=list(LabelingDone.objects.filter(author=author).values_list('id_label', flat=True))
+    groups=list(LabelingToDo.objects.filter(tableName=tableselected).exclude(id__in=idDone).annotate(nb=F('labeled')+F('ongoing')).filter(nb__lt=nb_labelingtodo_bylabel).values_list('categ', flat=True).distinct())
     if groups==list():
         return HttpResponseRedirect(reverse('labeling_final'))
     if request.method == "POST":
@@ -124,12 +139,13 @@ def labeling_groupChoice(request, nb_labelingtodo_bylabel=nb_labelingtodo_bylabe
 
 def labeling_prediction(request, nb_labelingtodo_bylabel=nb_labelingtodo_bylabel):
     author=request.session['author']
+    tableselected=request.session['tableselected']
     groupselected=request.session['groupselected']
     
     idDone=LabelingDone.objects.filter(author=author).values_list('id_label', flat=True)
-    idLabel=LabelingToDo.objects.filter(categ=groupselected).exclude(id__in=list(idDone)).annotate(nb=F('labeled')+F('ongoing')).filter(nb__lt=nb_labelingtodo_bylabel).values_list('id', flat=True).first()
+    idLabel=LabelingToDo.objects.filter(tableName=tableselected).filter(categ=groupselected).exclude(id__in=list(idDone)).annotate(nb=F('labeled')+F('ongoing')).filter(nb__lt=nb_labelingtodo_bylabel).values_list('id', flat=True).first()
 
-    idOnGoing=LabelingOnGoing.objects.filter(author=author).filter(id_label__in=LabelingToDo.objects.filter(categ=groupselected).values_list('id', flat=True)).values_list('id_label', flat=True).first()
+    idOnGoing=LabelingOnGoing.objects.filter(author=author).filter(id_label__in=LabelingToDo.objects.filter(tableName=tableselected).filter(categ=groupselected).values_list('id', flat=True)).values_list('id_label', flat=True).first()
     if idOnGoing:
         idLabel=idOnGoing
         
@@ -245,35 +261,45 @@ def labeling_prediction(request, nb_labelingtodo_bylabel=nb_labelingtodo_bylabel
             'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
 
 def labeling_summary(request):
-    nb_labeled_atLeastOnce=LabelingToDo.objects.filter(labeled__gt=0).count()
-    nb_labeled=LabelingToDo.objects.filter(labeled=nb_labelingtodo_bylabel).count()
-    nb_total=LabelingToDo.objects.count()
+    total=list(LabelingToDo.objects.values('tableName').annotate(total=Count('tableName')))           
+    labeledAtLeastOnce=list(LabelingToDo.objects.all().filter(labeled__gt=0).values('tableName').annotate(labeledatleastOnce=Count('categ')))
+    labeled=list(LabelingToDo.objects.all().filter(labeled=nb_labelingtodo_bylabel).values('tableName').annotate(labeled=Count('categ'))) 
+    total.extend(labeledAtLeastOnce)
+    total.extend(labeled)
+    resbytable=pd.DataFrame(total)
+    resbytable=resbytable.groupby('tableName').max().fillna(0).astype(int).reset_index().to_dict('records')
 
-    total=list(LabelingToDo.objects.all().values('categ').annotate(total=Count('categ')))            
-    labeledAtLeastOnce=list(LabelingToDo.objects.all().filter(labeled__gt=0).values('categ').annotate(labeledatleastOnce=Count('categ'))) 
-    labeled=list(LabelingToDo.objects.all().filter(labeled=nb_labelingtodo_bylabel).values('categ').annotate(labeled=Count('categ'))) 
+    total=list(LabelingToDo.objects.all().values('tableName','categ').annotate(total=Count('categ')))            
+    labeledAtLeastOnce=list(LabelingToDo.objects.all().filter(labeled__gt=0).values('tableName','categ').annotate(labeledatleastOnce=Count('categ'))) 
+    labeled=list(LabelingToDo.objects.all().filter(labeled=nb_labelingtodo_bylabel).values('tableName','categ').annotate(labeled=Count('categ'))) 
     total.extend(labeledAtLeastOnce)
     total.extend(labeled)
     resbygroup=pd.DataFrame(total)
-    resbygroup=resbygroup.groupby('categ').max().fillna(0).astype(int).reset_index().to_dict('records')  
+    resbygroup=resbygroup.groupby(['tableName', 'categ']).max().fillna(0).astype(int).reset_index().to_dict('records')  
 
     if request.method == "POST":
         return HttpResponseRedirect(reverse('labeling_author'))
-    return render(request, 'endpoints/labeling_summary.html', {'nb_labeled':nb_labeled_atLeastOnce, 'nb_total':nb_total,
+    return render(request, 'endpoints/labeling_summary.html', {'resbytable':resbytable,
         'resbygroup':resbygroup})
 
 def labeling_final(request):
     author=request.session['author']
-    nb_labeled_atLeastOnce=LabelingToDo.objects.filter(labeled__gt=0).count()
-    nb_total=LabelingToDo.objects.count()
+    
+    total=list(LabelingToDo.objects.values('tableName').annotate(total=Count('tableName')))           
+    labeledAtLeastOnce=list(LabelingToDo.objects.all().filter(labeled__gt=0).values('tableName').annotate(labeledatleastOnce=Count('categ')))
+    labeled=list(LabelingToDo.objects.all().filter(labeled=nb_labelingtodo_bylabel).values('tableName').annotate(labeled=Count('categ'))) 
+    total.extend(labeledAtLeastOnce)
+    total.extend(labeled)
+    resbytable=pd.DataFrame(total)
+    resbytable=resbytable.groupby('tableName').max().fillna(0).astype(int).reset_index().to_dict('records')
 
-    total=list(LabelingToDo.objects.values('categ').annotate(total=Count('categ')))           
-    labeledAtLeastOnce=list(LabelingToDo.objects.all().filter(labeled__gt=0).values('categ').annotate(labeledatleastOnce=Count('categ')))
-    labeled=list(LabelingToDo.objects.all().filter(labeled=nb_labelingtodo_bylabel).values('categ').annotate(labeled=Count('categ'))) 
+    total=list(LabelingToDo.objects.all().values('tableName','categ').annotate(total=Count('categ')))            
+    labeledAtLeastOnce=list(LabelingToDo.objects.all().filter(labeled__gt=0).values('tableName','categ').annotate(labeledatleastOnce=Count('categ'))) 
+    labeled=list(LabelingToDo.objects.all().filter(labeled=nb_labelingtodo_bylabel).values('tableName','categ').annotate(labeled=Count('categ'))) 
     total.extend(labeledAtLeastOnce)
     total.extend(labeled)
     resbygroup=pd.DataFrame(total)
-    resbygroup=resbygroup.groupby('categ').max().fillna(0).astype(int).reset_index().to_dict('records')
+    resbygroup=resbygroup.groupby(['tableName', 'categ']).max().fillna(0).astype(int).reset_index().to_dict('records')  
 
     if request.method == "POST":
         if 'unknown' in request.POST:
@@ -282,4 +308,4 @@ def labeling_final(request):
             return HttpResponseRedirect(reverse('labeling_groupChoice'))
         if 'labelingbyhand' in request.POST:
             return HttpResponseRedirect(reverse('labelingbyhand_label'))
-    return render(request, 'endpoints/labeling_final.html', {'nb_labeled':nb_labeled_atLeastOnce, 'nb_total':nb_total, 'resbygroup':resbygroup})
+    return render(request, 'endpoints/labeling_final.html', {'resbytable':resbytable, 'resbygroup':resbygroup})

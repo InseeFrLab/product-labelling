@@ -7,6 +7,7 @@
         <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
         <link href="//fonts.googleapis.com/css?family=Berkshire+Swash&subset=latin,latin-ext" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+        <script src="../../static/js/tablefilter.js"></script>
     </head>
     <body>
         <div class="page-header">
@@ -15,21 +16,42 @@
         </div>
 
         <div class="content container">
-            <h3>Bilan d'avancement de la labellisation du fichier</h3>
-            <ul>
-                <li>Nombre total d'observations à labelliser dans le fichier : {{ nb_total }} </li>
-                <li>Nombre d'obervations labellisées au moins une fois : {{ nb_labeled_atLeastOnce }} </li>
-            </ul>
+            <h3>Bilan d'avancement de la labellisation des fichiers</h3>
 
-            <table border="1" width="600">
+            <p class="sep"></p>
+            <table id="table1" cellpadding="0" cellspacing="0" border="1" width="700">
+                <thead>
                     <tr>
-                        <td align="center"><B>Groupe</B></td>
-                        <td align="center"><B>Nombre de labellisés au moins une fois</B></td>
-                        <td align="center"><B>Nombre de labellisés deux fois</B></td>
-                        <td align="center"><B>Nombre total</B></td>
+                        <th align="center"><B>Nom du fichier</B></th>
+                        <th align="center"><B>Nombre de labellisés au moins une fois</B></th>
+                        <th align="center"><B>Nombre de labellisés deux fois</B></th>
+                        <th align="center"><B>Nombre total</B></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in resbytable %}
+                    <tr>
+                        <td>{{ row.tableName }}</td>  
+                        <td>{{ row.labeledatleastOnce }}</td> 
+                        <td>{{ row.labeled }}</td> 
+                        <td>{{ row.total }}</td> 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <p class="sep"></p>
+            <table id="table2" cellpadding="0" cellspacing="0" border="1" width="700">
+                    <tr>
+                        <th align="center"><B>Nom du fichier</B></th>
+                        <th align="center"><B>Groupe</B></th>
+                        <th align="center"><B>Nombre de labellisés au moins une fois</B></th>
+                        <th align="center"><B>Nombre de labellisés deux fois</B></th>
+                        <th align="center"><B>Nombre total</B></th>
                     </tr>
                     {% for row in resbygroup %}
-                    <tr> 
+                    <tr>
+                        <td>{{ row.tableName }}</td>  
                         <td>{{ row.categ }}</td> 
                         <td>{{ row.labeledatleastOnce }}</td> 
                         <td>{{ row.labeled }}</td> 
@@ -47,6 +69,37 @@
                 </div>
             </div>
         </div>
-    
+
+        <script data-config="">
+            var filtersConfig1 =  {
+                base_path: '../../static/js/',
+                col_0: "select",  
+                col_1: "none",
+                col_2: "none",
+                col_3: "none",
+                sort_select: true
+            };
+            var tf1 = new TableFilter('table1', filtersConfig1);
+            tf1.init();
+        
+            var filtersConfig2 =  {
+                base_path: '../../static/js/',
+                col_0: "select",  
+                col_1: "select",
+                col_2: "none",
+                col_3: "none",
+                col_4: "none",
+                display_all_text: " [ Show all ] ", 
+                sort_select: true
+            };
+            var tf2 = new TableFilter('table2', filtersConfig2);
+            tf2.init();
+        </script>
+        
     </body>
 </html>
+
+          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+          <!-- <script src="https://code.jquery.com/jquery.min.js"></script> -->
+          <!-- Include all compiled plugins (below), or include individual files as needed -->
+          <!-- <script src="assets/js/bootstrap.min.js"></script> -->
