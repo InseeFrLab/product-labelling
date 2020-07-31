@@ -10,8 +10,8 @@
     </head>
     <body>
         <div class="page-header">
-            <a href="{% url 'post_author_labellisation' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
-            <h1><a href="/author">Labellisation des données de caisse</a></h1>
+            <a href="{% url 'labeling_author' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/labeling/author">Labellisation des données de caisse</a></h1>
         </div>
 
         <div class="content container">
@@ -21,7 +21,7 @@
                     <form method="POST" class="post-form">{% csrf_token %}
                         <input list="suggestion" type="text" name="groupselected" id="groupselected">
                         <datalist id="suggestion">
-                            {% for gr in groupes %}
+                            {% for gr in groups %}
                                 <option value="{{ gr }}">
                             {% endfor %}
                         </datalist>

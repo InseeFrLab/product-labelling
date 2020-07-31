@@ -4,16 +4,16 @@ from django.conf import settings
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from apps.endpoints.views import post_author, post_libelle, post_listprediction, post_labellisation
-from apps.endpoints.views import post_author_labellisation, post_groupChoice_labellisation, post_bilanlabellisation, post_final
+from apps.endpoints.views import labelingbyhand_author, labelingbyhand_label, labelingbyhand_prediction
+from apps.endpoints.views import labeling_author, labeling_groupChoice, labeling_prediction, labeling_summary, labeling_final
 
 urlpatterns = [
-    path('post/author/', post_author, name='post_author'),
-    path('post/prediction/', post_listprediction, name='post_listprediction'),
-    path('post/libelle/', post_libelle, name='post_libelle'),
-    path('labellisation', post_labellisation, name='post_labellisation'),
-    path('author', post_author_labellisation, name='post_author_labellisation'),
-    path('groupchoice', post_groupChoice_labellisation, name='post_groupChoice_labellisation'),
-    path('bilan', post_bilanlabellisation, name='post_bilanlabellisation'),
-    path('final', post_final, name='post_final')
+    path('labelingbyhand/author/', labelingbyhand_author, name='labelingbyhand_author'),
+    path('labelingbyhand/label/', labelingbyhand_label, name='labelingbyhand_label'),
+    path('labelingbyhand/prediction/', labelingbyhand_prediction, name='labelingbyhand_prediction'),
+    path('labeling/author', labeling_author, name='labeling_author'),
+    path('labeling/groupchoice', labeling_groupChoice, name='labeling_groupChoice'),
+    path('labeling/prediction', labeling_prediction, name='labeling_prediction'),
+    path('labeling/summary', labeling_summary, name='labeling_summary'),
+    path('labeling/final', labeling_final, name='labeling_final')
 ]

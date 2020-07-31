@@ -1,5 +1,5 @@
 from django import forms
-from apps.endpoints.models import Author, Post, LabellisationManuelle 
+from apps.endpoints.models import Author, Label, LabelingByHand, LabelingDone
 
 class AuthorForm(forms.ModelForm):
 
@@ -7,13 +7,18 @@ class AuthorForm(forms.ModelForm):
         model = Author
         fields = ('name',)
 
-class PostForm(forms.ModelForm):
+class LabelForm(forms.ModelForm):
 
     class Meta:
-        model = Post
-        fields = ('libelle',)
+        model = Label
+        fields = ('label_in',)
 
-class PredictionForm(forms.ModelForm):
+class LabelingByHandForm(forms.ModelForm):
     class Meta:
-        model = LabellisationManuelle
-        fields = ('libelle', 'label', 'prediction',)
+        model = LabelingByHand
+        fields = '__all__'
+
+class LabelingForm(forms.ModelForm):
+    class Meta:
+        model = LabelingDone
+        fields = '__all__'

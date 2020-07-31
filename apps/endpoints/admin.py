@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.endpoints.models import Post, Labellisation
+from apps.endpoints.models import LabelingByHand, LabelingDone
 
-admin.site.register(Post)
-admin.site.register(Labellisation)
+admin.site.register(LabelingByHand)
+admin.site.register(LabelingDone)

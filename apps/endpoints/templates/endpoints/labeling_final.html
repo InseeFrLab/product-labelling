@@ -10,8 +10,8 @@
     </head>
     <body>
         <div class="page-header">
-            <a href="{% url 'post_author' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
-            <h1><a href="/post/author">Labellisation des données de caisse</a></h1>
+            <a href="{% url 'labelingbyhand_author' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/labelingbyhand/author">Labellisation des données de caisse</a></h1>
         </div>
 
         <div class="content container">
@@ -20,21 +20,21 @@
                 <h3>Fin de labellisation du fichier</h3>
                 <ul>
                     <li>Nombre total d'observations à labelliser dans le fichier : {{ nb_total }} </li>
-                     <li>Nombre d'obervations labellisées : {{ nb_labellise }} </li>
+                     <li>Nombre d'obervations labellisées au moins une fois : {{ nb_labeled_atLeastOnce }} </li>
                 </ul>
         
                 <table border="1" width="600">
                     <tr>
-                        <td align="center"><B>Groupe</B></td>
-                        <td align="center"><B>Nombre de labellisés</B></td>
-                        <td align="center"><B>Nombre de "je ne sais pas"</B></td>
+                        <td align="center"><B>Catégorie</B></td>
+                        <td align="center"><B>Nombre de labellisés au moins une fois</B></td>
+                        <td align="center"><B>Nombre de labellisés deux fois</B></td>
                         <td align="center"><B>Nombre total</B></td>
                     </tr>
                     {% for row in resbygroup %}
                     <tr> 
-                        <td>{{ row.groupe }}</td> 
-                        <td>{{ row.labellise }}</td> 
-                        <td>{{ row.attente }}</td> 
+                        <td>{{ row.group }}</td> 
+                        <td>{{ row.labeledatleastOnce }}</td> 
+                        <td>{{ row.labeled }}</td> 
                         <td>{{ row.total }}</td> 
                     </tr>
                     {% endfor %}
@@ -45,13 +45,13 @@
             <div class="row">
                 <div class="col-md-6">         
                 <form method="POST" class="post-form">{% csrf_token %}
-                    <p class="sep"><label for="attente"><h4>Pour permettre de labelliser à nouveau les produits taggés comme "je ne sais pas": </h4></label>
-                    <button type="submit" class="save btn btn-default" name="attente" value=None>Re-labelliser</button></p>
+                    <p class="sep"><label for="unknown"><h4>Pour permettre de labelliser à nouveau les produits taggés comme "je ne sais pas": </h4></label>
+                    <button type="submit" class="save btn btn-default" name="unknown" value=None>Re-labelliser</button></p>
                 </form>
 
                 <form method="POST" class="post-form">{% csrf_token %}
-                    <p class="sep"><label for="labellisationmanuelle"><h4>Pour continuer à labelliser en fournissant le libellé ... </h4></label>
-                    <button type="submit" class="save btn btn-default" name="labellisationmanuelle" value=None>Poursuivre</button></p>
+                    <p class="sep"><label for="labelingbyhand"><h4>Pour continuer à labelliser en fournissant le libellé ... </h4></label>
+                    <button type="submit" class="save btn btn-default" name="labelingbyhand" value=None>Poursuivre</button></p>
                 </form>
                 </div>
             </div>

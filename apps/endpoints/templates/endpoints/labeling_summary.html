@@ -10,29 +10,29 @@
     </head>
     <body>
         <div class="page-header">
-            <a href="{% url 'post_author_labellisation' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
-            <h1><a href="/author">Labellisation des données de caisse</a></h1>
+            <a href="{% url 'labelingbyhand_author' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/labelingbyhand/author">Labellisation des données de caisse</a></h1>
         </div>
 
         <div class="content container">
             <h3>Bilan d'avancement de la labellisation du fichier</h3>
             <ul>
                 <li>Nombre total d'observations à labelliser dans le fichier : {{ nb_total }} </li>
-                <li>Nombre d'obervations labellisées : {{ nb_labellise }} </li>
+                <li>Nombre d'obervations labellisées au moins une fois : {{ nb_labeled_atLeastOnce }} </li>
             </ul>
 
             <table border="1" width="600">
                     <tr>
                         <td align="center"><B>Groupe</B></td>
-                        <td align="center"><B>Nombre de labellisés</B></td>
-                        <td align="center"><B>Nombre de "je ne sais pas"</B></td>
+                        <td align="center"><B>Nombre de labellisés au moins une fois</B></td>
+                        <td align="center"><B>Nombre de labellisés deux fois</B></td>
                         <td align="center"><B>Nombre total</B></td>
                     </tr>
                     {% for row in resbygroup %}
                     <tr> 
-                        <td>{{ row.groupe }}</td> 
-                        <td>{{ row.labellise }}</td> 
-                        <td>{{ row.attente }}</td> 
+                        <td>{{ row.categ }}</td> 
+                        <td>{{ row.labeledatleastOnce }}</td> 
+                        <td>{{ row.labeled }}</td> 
                         <td>{{ row.total }}</td> 
                     </tr>
                     {% endfor %}

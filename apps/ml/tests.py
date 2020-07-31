@@ -6,7 +6,7 @@ import inspect
 class MLTests(TestCase):
     def test_ft_algorithm(self):
         input_data = {
-            "libelle": "cahier"
+            "label_in": "cahier"
         }
         my_alg = FasttextClassifier()
         response = my_alg.compute_prediction(input_data)

@@ -12,7 +12,7 @@ from apps.ml.classifier.fasttext import FasttextClassifier
 
 try:
     ft = FasttextClassifier()
-    prediction=ft.compute_prediction({"libelle": 'cahier'})["predictions"]
+    prediction=ft.compute_prediction({"label_in": 'cahier'})["predictions"]
 
 except Exception as e:
     print("Exception while predicting,", str(e))

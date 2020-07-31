@@ -6,7 +6,7 @@ class EndpointTests(TestCase):
     def test_predict_view(self):
         client = APIClient()
         input_data = "name"
-        test_url = "/post/author"
+        test_url = "/labelingbyhand/author"
         response = client.post(test_url, input_data)
         self.assertEqual(response.status_code, 200)
 
