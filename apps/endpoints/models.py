@@ -31,7 +31,7 @@ class Label(models.Model):
         """String for representing the Model object."""
         return self.libelle
 
-class LabelingByHand(models.Model):
+class labellingByHand(models.Model):
     id = models.AutoField(primary_key=True)
     author = models.CharField(max_length=200)
     label_in = models.CharField(max_length=100000)
@@ -48,7 +48,7 @@ class LabelingByHand(models.Model):
         """String for representing the Model object."""
         return self.libelle
 
-class LabelingToDo(models.Model):
+class labellingToDo(models.Model):
     id = models.AutoField(primary_key=True)
     label_in = models.CharField(max_length=100000)
     table_name = models.TextField(blank=True, null=True)
@@ -61,7 +61,7 @@ class LabelingToDo(models.Model):
         """String for representing the Model object."""
         return self.libelle
 
-class LabelingOnGoing(models.Model):
+class labellingOnGoing(models.Model):
     id = models.AutoField(primary_key=True)
     id_label=models.IntegerField(blank=True, null=True)
     author = models.TextField(blank=True, null=True)
@@ -71,7 +71,7 @@ class LabelingOnGoing(models.Model):
         """String for representing the Model object."""
         return self.libelle
 
-class LabelingDone(models.Model):
+class labellingDone(models.Model):
     id = models.AutoField(primary_key=True)
     id_label=models.IntegerField(blank=True, null=True)
     label_in = models.CharField(max_length=100000)

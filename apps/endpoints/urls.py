@@ -4,18 +4,18 @@ from django.conf import settings
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from apps.endpoints.views import labelingbyhand_author, labelingbyhand_label, labelingbyhand_prediction
-from apps.endpoints.views import labeling_author, labeling_tableChoice, labeling_groupChoice, labeling_prediction
-from apps.endpoints.views import labeling_summary, labeling_final
+from apps.endpoints.views import labellingbyhand_author, labellingbyhand_label, labellingbyhand_prediction
+from apps.endpoints.views import labelling_author, labelling_tableChoice, labelling_groupChoice, labelling_prediction
+from apps.endpoints.views import labelling_summary, labelling_final
 
 urlpatterns = [
-    path('labelingbyhand/author/', labelingbyhand_author, name='labelingbyhand_author'),
-    path('labelingbyhand/label/', labelingbyhand_label, name='labelingbyhand_label'),
-    path('labelingbyhand/prediction/', labelingbyhand_prediction, name='labelingbyhand_prediction'),
-    path('labeling/author', labeling_author, name='labeling_author'),
-    path('labeling/tablechoice', labeling_tableChoice, name='labeling_tableChoice'),
-    path('labeling/groupchoice', labeling_groupChoice, name='labeling_groupChoice'),
-    path('labeling/prediction', labeling_prediction, name='labeling_prediction'),
-    path('labeling/summary', labeling_summary, name='labeling_summary'),
-    path('labeling/final', labeling_final, name='labeling_final')
+    path('labellingbyhand/author/', labellingbyhand_author, name='labellingbyhand_author'),
+    path('labellingbyhand/label/', labellingbyhand_label, name='labellingbyhand_label'),
+    path('labellingbyhand/prediction/', labellingbyhand_prediction, name='labellingbyhand_prediction'),
+    path('labelling/author', labelling_author, name='labelling_author'),
+    path('labelling/tablechoice', labelling_tableChoice, name='labelling_tableChoice'),
+    path('labelling/groupchoice', labelling_groupChoice, name='labelling_groupChoice'),
+    path('labelling/prediction', labelling_prediction, name='labelling_prediction'),
+    path('labelling/summary', labelling_summary, name='labelling_summary'),
+    path('labelling/final', labelling_final, name='labelling_final')
 ]

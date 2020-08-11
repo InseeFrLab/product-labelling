@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.endpoints.models import LabelingByHand, LabelingDone
+from apps.endpoints.models import labellingByHand, labellingDone
 
-admin.site.register(LabelingByHand)
-admin.site.register(LabelingDone)
+admin.site.register(labellingByHand)
+admin.site.register(labellingDone)

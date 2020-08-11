@@ -11,8 +11,8 @@
     </head>
     <body>
         <div class="page-header">
-            <a href="{% url 'labelingbyhand_author' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
-            <h1><a href="/labelingbyhand/author">Labellisation des données de caisse</a></h1>
+            <a href="{% url 'labellingbyhand_author' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/labellingbyhand/author">Labellisation des données de caisse</a></h1>
         </div>
 
         <div class="content container">
@@ -69,8 +69,8 @@
                 </form>
 
                 <form method="POST" class="post-form">{% csrf_token %}
-                    <p class="sep"><label for="labelingbyhand"><h4>Pour continuer à labelliser en fournissant le libellé ... </h4></label>
-                    <button type="submit" class="save btn btn-default" name="labelingbyhand" value=None>Poursuivre</button></p>
+                    <p class="sep"><label for="labellingbyhand"><h4>Pour continuer à labelliser en fournissant le libellé ... </h4></label>
+                    <button type="submit" class="save btn btn-default" name="labellingbyhand" value=None>Poursuivre</button></p>
                 </form>
                 </div>
             </div>

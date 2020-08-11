@@ -10,23 +10,23 @@
     </head>
     <body>
         <div class="page-header">
-            <a href="{% url 'labeling_author' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
-            <h1><a href="/labeling/author">Labellisation des données de caisse</a></h1>
+            <a href="{% url 'labelling_author' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/labelling/author">Labellisation des données de caisse</a></h1>
         </div>
 
         <div class="content container">
-            <h3>Choix du fichier à labelliser</h3>
+            <h3>Choix du groupe à labelliser</h3>
             <div class="row">
                 <div class="col-md-8">
                     <form method="POST" class="post-form">{% csrf_token %}
-                        <input list="suggestion" type="text" name="tableselected" id="tableselected">
+                        <input list="suggestion" type="text" name="groupselected" id="groupselected">
                         <datalist id="suggestion">
-                            {% for table in tables %}
-                                <option value="{{ table }}">
+                            {% for gr in groups %}
+                                <option value="{{ gr }}">
                             {% endfor %}
                         </datalist>
                         <p class="sep"></p>
-                        <button type="submit" class="save btn btn-default">Commencer la labellisation de ce fichier</button>
+                        <button type="submit" class="save btn btn-default">Commencer la labellisation de ce groupe</button>
                     </form>
                 </div>
             </div>
