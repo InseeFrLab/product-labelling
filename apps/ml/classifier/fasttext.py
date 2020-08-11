@@ -14,7 +14,7 @@ import fasttext
 
 class FasttextClassifier:
     def __init__(self):
-        self.model = fasttext.load_model("fasttext.ftz")
+        self.model = fasttext.load_model("model.ftz")
         
     def preprocessing(self, input_data):
         # JSON to pandas DataFrame
