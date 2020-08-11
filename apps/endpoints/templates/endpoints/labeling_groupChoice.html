@@ -1,0 +1,36 @@
+{% load static %}
+<html>
+    <head>
+        <title>Labellisation données de caisse</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link href="//fonts.googleapis.com/css?family=Berkshire+Swash&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    </head>
+    <body>
+        <div class="page-header">
+            <a href="{% url 'labeling_author' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/labeling/author">Labellisation des données de caisse</a></h1>
+        </div>
+
+        <div class="content container">
+            <h3>Choix du groupe à labelliser</h3>
+            <div class="row">
+                <div class="col-md-8">
+                    <form method="POST" class="post-form">{% csrf_token %}
+                        <input list="suggestion" type="text" name="groupselected" id="groupselected">
+                        <datalist id="suggestion">
+                            {% for gr in groups %}
+                                <option value="{{ gr }}">
+                            {% endfor %}
+                        </datalist>
+                        <p class="sep"></p>
+                        <button type="submit" class="save btn btn-default">Commencer la labellisation de ce groupe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    
+    </body>
+</html>

@@ -10,36 +10,35 @@
     </head>
     <body>
         <div class="page-header">
-            <a href="{% url 'post_bilanlabellisation' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
-            <h1><a href="/bilan">Labellisation des données de caisse</a></h1>
+            <a href="{% url 'labelingbyhand_label' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1><a href="/labelingbyhand/author">Labellisation des données de caisse</a></h1>
         </div>
-      
-        <div class="content container" id="divPrediction">
+        <div class="content container">
             <div class="row">
                 <div class="col-md-8">
-                    <p>Pour le  libellé {{ libelle }} :</p>
+                    <p>Pour le  libellé {{ label_in }} :</p>
                         <table border="1" width="600">
                                 <tr>
-                                <td align="center"><B>Libellé</B></td>
                                 <td align="center"><B>Prediction</B></td>
+                                <td align="center"><B>Probabilité</B></td>
                                 </tr>
                                 <form method="POST" class="post-form">{% csrf_token %}
                                 {% for pred in predictions %}
                                 <tr>
-                                <td><input type="radio" name="label" id="label{{ pred.label }}" value="{{ pred.label }}" />
-                                    <label for="label{{ pred.label }}">{{ pred.label }}</label>
+                                <td><input type="radio" name="label_out" id="label_out{{ pred.prediction }}" value="{{ pred.prediction }}" />
+                                    <label for="label_out{{ pred.prediction }}">{{ pred.prediction }}</label>
                                 </td>
-                                <td>{{ pred.prediction }}</td>
+                                <td>{{ pred.probability }}</td>
                                 </tr>
                                 {% endfor %}
                                 
                                 {% if fichier_nomenclature %}
                                 <tr>
-                                <td><input type="radio" name="label" id="label-autre" value="" />
+                                <td><input type="radio" name="label_out" id="label-other" value="" />
                                     <input id="getselection" name="getselection" list="suggestion" type="text">
                                     <datalist id="suggestion">
-                                    {% for autre in nomenclature %}
-                                        <option value="{{ autre }}">
+                                    {% for other in nomenclature %}
+                                        <option value="{{ other }}">
                                     {% endfor %}
                                     </datalist>
                                 </td>
@@ -53,26 +52,15 @@
                         {% if warning %}
                             <h5 style="color:rgb(255,0,0);"><b><u>Warning</u></b> : Probas faibles pour les libellés prédits par le modèle</h5>
                         {% endif %}
-
-                        <div class="row">
-                            <form method="POST" class="post-form">{% csrf_token %}
-                                <p><button class="save btn btn-default" name="enattente" value=None>Je ne sais pas</button></p>
-                            </form>
-                        </div>
-                        <div class="row">
-                            <form method="POST" class="post-form">{% csrf_token %}
-                                <p class="sep"><button class="save btn btn-default" name="encours" value=None>Arrêter de labelliser</button></p>
-                            </form> 
-                        </div>
                 </div>
-            </div>            
+            </div>
         </div>
 
         <script>
             var getvalue=document.getElementsByName('getselection')[0];
             var val = getvalue.addEventListener('input', function(){
-                document.getElementById('label-autre').value=this.value;
-            })
+                document.getElementById('label-other').value=this.value;
+            })                        
         </script>
 
     </body>

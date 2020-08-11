@@ -16,10 +16,10 @@ class Author(models.Model):
         """String for representing the Model object."""
         return self.name
 
-class Post(models.Model):
+class Label(models.Model):
     id = models.AutoField(primary_key=True)
     author = models.CharField(max_length=200)
-    libelle = models.CharField(max_length=200)
+    label_in = models.CharField(max_length=200)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
 
@@ -31,12 +31,12 @@ class Post(models.Model):
         """String for representing the Model object."""
         return self.libelle
 
-class LabellisationManuelle(models.Model):
+class LabelingByHand(models.Model):
     id = models.AutoField(primary_key=True)
     author = models.CharField(max_length=200)
-    libelle = models.CharField(max_length=1000)
-    label = models.TextField()
-    prediction = models.TextField()
+    label_in = models.CharField(max_length=100000)
+    label_out = models.TextField()
+    probability = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
 
@@ -48,22 +48,38 @@ class LabellisationManuelle(models.Model):
         """String for representing the Model object."""
         return self.libelle
 
-class Labellisation(models.Model):
+class LabelingToDo(models.Model):
     id = models.AutoField(primary_key=True)
-    libelle = models.CharField(max_length=1000)
-    author = models.TextField(blank=True, null=True)
-    label = models.TextField(blank=True, null=True)
-    prediction = models.TextField(blank=True, null=True)
+    label_in = models.CharField(max_length=100000)
+    tableName = models.TextField(blank=True, null=True)
+    categ = models.TextField(blank=True, null=True)
     ean = models.TextField(blank=True, null=True)
-    groupe = models.TextField(blank=True, null=True)
-    published_date = models.DateTimeField(blank=True, null=True)
-    encours = models.BooleanField(blank=True, null=True)
-    labellise = models.BooleanField(blank=True, null=True)
-    enattente = models.BooleanField(blank=True, null=True)
+    ongoing = models.PositiveIntegerField(blank=True, default=0)
+    labeled = models.PositiveIntegerField(blank=True, default=0)
 
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.libelle
+
+class LabelingOnGoing(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_label=models.IntegerField(blank=True, null=True)
+    author = models.TextField(blank=True, null=True)
+    published_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.libelle
+
+class LabelingDone(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_label=models.IntegerField(blank=True, null=True)
+    label_in = models.CharField(max_length=100000)
+    author = models.TextField(blank=True, null=True)
+    label_out = models.TextField(blank=True, null=True)
+    probability = models.TextField(blank=True, null=True)
+    published_date = models.DateTimeField(blank=True, null=True)
+    unknown = models.BooleanField(blank=True, null=True)
 
     def __str__(self):
         """String for representing the Model object."""

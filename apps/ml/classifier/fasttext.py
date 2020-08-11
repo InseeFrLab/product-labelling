@@ -18,7 +18,7 @@ class FasttextClassifier:
         
     def preprocessing(self, input_data):
         # JSON to pandas DataFrame
-        input_data = pd.DataFrame(input_data, index=[0], columns=['libelle'])
+        input_data = pd.DataFrame(input_data, index=[0], columns=['label_in'])
         # Standardisation du libelle
         replace_accents = {
                 'à': 'a',
@@ -30,8 +30,8 @@ class FasttextClassifier:
                 'ô': 'o',
                 'ù': 'u',
                 }
-        input_data.replace({"libelle": replace_accents}, regex=True, inplace=True)
-        input_data['libelle'] = input_data['libelle'].str.upper()
+        input_data.replace({"label_in": replace_accents}, regex=True, inplace=True)
+        input_data['label_in'] = input_data['label_in'].str.upper()
         # Nettoyage du libelle
         replace_values_ean = {
                 '\.': ' ',
@@ -51,9 +51,9 @@ class FasttextClassifier:
                 r'\s\d+\b': ' ',
                 r'^\d+ ': '',
                 }
-        input_data.replace({"libelle": replace_values_ean}, regex=True, inplace=True)
-        input_data.replace({"libelle": {r'([ ]{2,})': ' '}}, regex=True, inplace=True) # Suppression des espaces multiples
-        input_data=input_data['libelle'][0]
+        input_data.replace({"label_in": replace_values_ean}, regex=True, inplace=True)
+        input_data.replace({"label_in": {r'([ ]{2,})': ' '}}, regex=True, inplace=True) # Suppression des espaces multiples
+        input_data=input_data['label_in'][0]
         return input_data
         
     def predict(self, input_data):
@@ -61,7 +61,7 @@ class FasttextClassifier:
         return res
     
     def postprocessing(self, res):
-        return {"predictions": [{"label":p[0].replace('__label__','').replace('_',' '), "prediction":round(float(p[1]),2)} for p in np.transpose(res)], "status": "OK"}
+        return {"predictions": [{"prediction":p[0].replace('__label__','').replace('_',' '), "probability":round(float(p[1]),2)} for p in np.transpose(res)], "status": "OK"}
         #return np.transpose(res)
 
     def compute_prediction(self, input_data):
