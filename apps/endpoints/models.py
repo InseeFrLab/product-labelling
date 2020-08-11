@@ -51,7 +51,7 @@ class LabelingByHand(models.Model):
 class LabelingToDo(models.Model):
     id = models.AutoField(primary_key=True)
     label_in = models.CharField(max_length=100000)
-    tableName = models.TextField(blank=True, null=True)
+    table_name = models.TextField(blank=True, null=True)
     categ = models.TextField(blank=True, null=True)
     ean = models.TextField(blank=True, null=True)
     ongoing = models.PositiveIntegerField(blank=True, default=0)
