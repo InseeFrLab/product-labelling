@@ -217,7 +217,7 @@ def labelling_prediction(request, nb_labellingtodo_bylabel=nb_labellingtodo_byla
                         label_in = postedLabel,
                         author = author,
                         label_out = request.POST['label_out'],
-			categ=labellingToDo.objects.filter(id=postedLabel).values_list('categ', flat=True),
+			categ=labellingToDo.objects.filter(id=postedLabel).values_list('categ', flat=True).first(),
                         probability = float(posteddf[posteddf.prediction==str(request.POST['label_out'])]["probability"]),
                         published_date = timezone.now()
                     )
@@ -227,7 +227,7 @@ def labelling_prediction(request, nb_labellingtodo_bylabel=nb_labellingtodo_byla
                         label_in = postedLabel,
                         author = author,
                         label_out = request.POST['label_out'],
-			categ=labellingToDo.objects.filter(id=postedLabel).values_list('categ', flat=True),
+			categ=labellingToDo.objects.filter(id=postedLabel).values_list('categ', flat=True).first(),
                         probability = float('nan'),
                         published_date = timezone.now()
                     )
