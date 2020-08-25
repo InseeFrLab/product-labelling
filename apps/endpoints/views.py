@@ -235,8 +235,7 @@ def labelling_prediction(request, nb_labellingtodo_bylabel=nb_labellingtodo_byla
                 
             return HttpResponseRedirect(reverse('labelling_prediction'))
         if 'stop' in request.POST:
-            request.session.flush()
-            return HttpResponseRedirect(reverse('labelling_summary'))
+            return HttpResponseRedirect(reverse('labelling_groupChoice'))
         if 'unknown' in request.POST:
             entry=labellingDone(id_label=idPostedLabel,
                         label_in = postedLabel,
