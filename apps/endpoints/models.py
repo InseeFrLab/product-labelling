@@ -63,7 +63,7 @@ class labellingToDo(models.Model):
 
 class labellingOnGoing(models.Model):
     id = models.AutoField(primary_key=True)
-    id_label=models.IntegerField(blank=True, null=True)
+    id_label = models.IntegerField(blank=True, null=True)
     author = models.TextField(blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
 
