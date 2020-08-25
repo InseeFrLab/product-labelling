@@ -268,7 +268,7 @@ def labelling_summary(request):
     total.extend(labeledAtLeastOnce)
     total.extend(labeled)
     resbytable=pd.DataFrame(total)
-    resbytable=resbytable.groupby('table_name').max().fillna(0).astype(int).reset_index().to_dict('records')
+    resbytable=resbytable.groupby('table_name').max().fillna(0).astype(int).reset_index().sort_values(['labeled', 'labeledatleastOnce'], ascending=[False, False]).to_dict('records')
 
     total=list(labellingToDo.objects.all().values('table_name','categ').annotate(total=Count('categ')))            
     labeledAtLeastOnce=list(labellingToDo.objects.all().filter(labeled__gt=0).values('table_name','categ').annotate(labeledatleastOnce=Count('categ'))) 
@@ -276,7 +276,7 @@ def labelling_summary(request):
     total.extend(labeledAtLeastOnce)
     total.extend(labeled)
     resbygroup=pd.DataFrame(total)
-    resbygroup=resbygroup.groupby(['table_name', 'categ']).max().fillna(0).astype(int).reset_index().to_dict('records')  
+    resbygroup=resbygroup.groupby(['table_name', 'categ']).max().fillna(0).astype(int).reset_index().sort_values(['labeled', 'labeledatleastOnce'], ascending=[False, False]).to_dict('records')  
 
     if request.method == "POST":
         return HttpResponseRedirect(reverse('labelling_author'))
@@ -292,7 +292,7 @@ def labelling_final(request):
     total.extend(labeledAtLeastOnce)
     total.extend(labeled)
     resbytable=pd.DataFrame(total)
-    resbytable=resbytable.groupby('table_name').max().fillna(0).astype(int).reset_index().to_dict('records')
+    resbytable=resbytable.groupby('table_name').max().fillna(0).astype(int).reset_index().sort_values(['labeled', 'labeledatleastOnce'], ascending=[False, False]).to_dict('records')
 
     total=list(labellingToDo.objects.all().values('table_name','categ').annotate(total=Count('categ')))            
     labeledAtLeastOnce=list(labellingToDo.objects.all().filter(labeled__gt=0).values('table_name','categ').annotate(labeledatleastOnce=Count('categ'))) 
@@ -300,7 +300,7 @@ def labelling_final(request):
     total.extend(labeledAtLeastOnce)
     total.extend(labeled)
     resbygroup=pd.DataFrame(total)
-    resbygroup=resbygroup.groupby(['table_name', 'categ']).max().fillna(0).astype(int).reset_index().to_dict('records')  
+    resbygroup=resbygroup.groupby(['table_name', 'categ']).max().fillna(0).astype(int).reset_index().sort_values(['labeled', 'labeledatleastOnce'], ascending=[False, False]).to_dict('records')  
 
     if request.method == "POST":
         if 'unknown' in request.POST:
