@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+﻿from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework import views, status
 from rest_framework.response import Response
@@ -217,6 +217,7 @@ def labelling_prediction(request, nb_labellingtodo_bylabel=nb_labellingtodo_byla
                         label_in = postedLabel,
                         author = author,
                         label_out = request.POST['label_out'],
+			categ=labellingToDo.objects.filter(id=postedLabel).values_list('categ', flat=True),
                         probability = float(posteddf[posteddf.prediction==str(request.POST['label_out'])]["probability"]),
                         published_date = timezone.now()
                     )
@@ -226,6 +227,7 @@ def labelling_prediction(request, nb_labellingtodo_bylabel=nb_labellingtodo_byla
                         label_in = postedLabel,
                         author = author,
                         label_out = request.POST['label_out'],
+			categ=labellingToDo.objects.filter(id=postedLabel).values_list('categ', flat=True),
                         probability = float('nan'),
                         published_date = timezone.now()
                     )
