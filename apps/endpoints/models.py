@@ -36,7 +36,7 @@ class labellingByHand(models.Model):
     author = models.CharField(max_length=200)
     label_in = models.CharField(max_length=100000)
     label_out = models.TextField()
-    probability = models.TextField()
+    probability = models.FloatField()
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
 
@@ -73,8 +73,9 @@ class labellingOnGoing(models.Model):
 
 class labellingDone(models.Model):
     id = models.AutoField(primary_key=True)
-    id_label=models.IntegerField(blank=True, null=True)
+    id_label = models.IntegerField(blank=True, null=True)
     label_in = models.CharField(max_length=100000)
+    categ = models.TextField(blank=True, null=True)
     author = models.TextField(blank=True, null=True)
     label_out = models.TextField(blank=True, null=True)
     probability = models.TextField(blank=True, null=True)
