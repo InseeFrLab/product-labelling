@@ -2,10 +2,10 @@
 
 Application for labelling transaction receipts, developed as part of the transaction data project. Predictions are made using the fastText algorithm.
 
-The application includes two parts :
+The application available at ~/home includes two parts :
 
-* The main part available at ~/author aims at simplifying the labelling process.
-* The second one enables users to visualize the results (preprocessing and predictions of the model). The access to this functionality is through the link ~/post/author
+* The main part aims at simplifying the labelling process. One label from a file are automatically offered to the user who has to choose the rigth associated category/label.
+* The second one enables users to visualize the results (preprocessing and predictions of the model).
 
 ## Quick start
 
