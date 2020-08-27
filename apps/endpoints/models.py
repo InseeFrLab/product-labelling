@@ -29,14 +29,14 @@ class Label(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.libelle
+        return self.label_in
 
 class labellingByHand(models.Model):
     id = models.AutoField(primary_key=True)
     author = models.CharField(max_length=200)
     label_in = models.CharField(max_length=100000)
     label_out = models.TextField()
-    probability = models.FloatField()
+    probability = models.FloatField(blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
 
@@ -46,7 +46,7 @@ class labellingByHand(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.libelle
+        return self.label_in
 
 class labellingToDo(models.Model):
     id = models.AutoField(primary_key=True)
@@ -59,7 +59,7 @@ class labellingToDo(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.libelle
+        return self.label_in
 
 class labellingOnGoing(models.Model):
     id = models.AutoField(primary_key=True)
@@ -69,7 +69,7 @@ class labellingOnGoing(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.libelle
+        return self.id
 
 class labellingDone(models.Model):
     id = models.AutoField(primary_key=True)
@@ -78,10 +78,10 @@ class labellingDone(models.Model):
     categ = models.TextField(blank=True, null=True)
     author = models.TextField(blank=True, null=True)
     label_out = models.TextField(blank=True, null=True)
-    probability = models.TextField(blank=True, null=True)
+    probability = models.FloatField(blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
     unknown = models.BooleanField(blank=True, null=True)
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.libelle
+        return self.label_in

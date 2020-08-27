@@ -44,9 +44,10 @@
                                 <tr>
                                 <td><input type="radio" name="label_out" id="label-other" value=""/>
                                     <select id="suggestion" name="getselection" class="scrolling">
-                                    {% for other in nomenclature %}
-                                        <option value="{{ other }}">{{ other }}</option>
-                                    {% endfor %}
+                                        <option value="" class="italique" selected disabled hidden>Choisir le libellé dans la nomenclature</option>
+                                        {% for other in nomenclature %}
+                                            <option value="{{ other }}">{{ other }}</option>
+                                        {% endfor %}
                                     </select>
                                 </td>
                                 <td></td>
@@ -79,11 +80,10 @@
             var getvalue=document.getElementsByName('getselection')[0];
             var val = getvalue.addEventListener('input', function(){
                 document.getElementById('label-other').value=this.value;
-            })
+            });
 
             var formPrediction = document.getElementById('formPrediction');
-                formPrediction.addEventListener('submit', function() {
-
+            formPrediction.addEventListener('submit', function(e) {
                     var radioButtons = document.getElementsByName('label_out'),
                         nochecked = true;
 
@@ -92,8 +92,17 @@
                     }
 
                     if (nochecked) {
+                        e.preventDefault();
                         alert('Il faut cocher une case avant de cliquer sur choisir');
                     }
+
+                    if (radioButtons[3].checked){
+                        var labelout=document.getElementsByName('getselection')[0].value;
+                        if (labelout == "") {
+                            e.preventDefault();
+                            alert('Il faut choisir un libellé dans la nomenclature avant de cliquer sur choisir');
+                        }
+                    } 
                 });
         </script>
 

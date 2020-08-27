@@ -20,9 +20,16 @@
                 <div class="col-md-8">
                         <form method="POST" class="post-form">{% csrf_token %}
                             {{ form.as_p }}
-                            <button type="submit" class="save btn btn-default">Commencer la labellisation</button>
+                            <div class="row">
+                                <p class="sep"><button type="submit" class="save btn btn-default" name="labelling" value=None>Commencer la labellisation à partir d'un fichier</button></p>
+                            </div>
+                            <div class="row">
+                                <p class="sep"><button type="submit" class="save btn btn-default" name="labellingbyhand" value=None>Commencer la labellisation manuelle (cad en fournissant le label à labelliser)</button></p>
+                            </div>
+                            
                         </form>
                 </div>
+            </div>
             </div>
         </div>
     </body>

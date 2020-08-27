@@ -28,19 +28,26 @@ import pandas as pd
 nb_labellingtodo_bylabel=2
 
 #########################################
-# labelling BY HAND
+# HOME
 #########################################
 
-def labellingbyhand_author(request):
+def home(request):
     if request.method == "POST":
         form = AuthorForm(request.POST)
         if form.is_valid():
             request.session['author'] = form.cleaned_data['name']
             post = form.save(commit=False)
+        if 'labelling' in request.POST:
+            return HttpResponseRedirect(reverse('labelling_tableChoice'))
+        if 'labellingbyhand' in request.POST:
             return HttpResponseRedirect(reverse('labellingbyhand_label'))
     else:
         form = AuthorForm()
-    return render(request, 'endpoints/labellingbyhand_author.html', {'form': form})
+    return render(request, 'endpoints/home.html', {'form': form})
+
+#########################################
+# labelling BY HAND
+#########################################
 
 def labellingbyhand_label(request):
     author=request.session['author']
@@ -82,31 +89,17 @@ def labellingbyhand_prediction(request):
         post.label_out=request.POST['label_out']
         if request.POST['label_out'] in list(df.prediction):
             post.probability=float(df[df.prediction==str(request.POST['label_out'])]["probability"])
-        else:
-            post.probability=float('nan')
-        post.published_date = timezone.now() 
+        post.published_date = timezone.now()
         post.save()
         return HttpResponseRedirect(reverse('labellingbyhand_label'))
 
-    return render(request, 'endpoints/labellingbyhand_prediction.html', {'label_in':str(label_in)+' (transformé par preprocessing en : '+str(label_in_preprocessed)+')' ,
+    return render(request, 'endpoints/labellingbyhand_prediction.html', {'label_in': label_in, 'label_in_preprocessed':str(label_in_preprocessed),
         'predictions':prediction, 'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
 
 
 #########################################
 # labelling FROM A FILE
 #########################################
-
-def labelling_author(request):
-    request.session.flush()
-    if request.method == "POST":
-        form = AuthorForm(request.POST)
-        if form.is_valid():
-            request.session['author'] = form.cleaned_data['name']
-            post = form.save(commit=False)
-            return HttpResponseRedirect(reverse('labelling_tableChoice'))
-    else:
-        form = AuthorForm()
-    return render(request, 'endpoints/labelling_author.html', {'form': form})
 
 def labelling_tableChoice(request, nb_labellingtodo_bylabel=nb_labellingtodo_bylabel):
     author=request.session['author']
@@ -217,7 +210,7 @@ def labelling_prediction(request, nb_labellingtodo_bylabel=nb_labellingtodo_byla
                         label_in = postedLabel,
                         author = author,
                         label_out = request.POST['label_out'],
-			categ=labellingToDo.objects.filter(id=postedLabel).values_list('categ', flat=True).first(),
+			            categ=labellingToDo.objects.filter(id=idPostedLabel).values_list('categ', flat=True).first(),
                         probability = float(posteddf[posteddf.prediction==str(request.POST['label_out'])]["probability"]),
                         published_date = timezone.now()
                     )
@@ -227,8 +220,7 @@ def labelling_prediction(request, nb_labellingtodo_bylabel=nb_labellingtodo_byla
                         label_in = postedLabel,
                         author = author,
                         label_out = request.POST['label_out'],
-			categ=labellingToDo.objects.filter(id=postedLabel).values_list('categ', flat=True).first(),
-                        probability = float('nan'),
+			            categ=labellingToDo.objects.filter(id=idPostedLabel).values_list('categ', flat=True).first(),
                         published_date = timezone.now()
                     )
                 entry.save()
@@ -240,6 +232,7 @@ def labelling_prediction(request, nb_labellingtodo_bylabel=nb_labellingtodo_byla
             entry=labellingDone(id_label=idPostedLabel,
                         label_in = postedLabel,
                         author = author,
+                        categ=labellingToDo.objects.filter(id=idPostedLabel).values_list('categ', flat=True).first(),
                         published_date = timezone.now(),
                         unknown=True
                     )
@@ -253,13 +246,13 @@ def labelling_prediction(request, nb_labellingtodo_bylabel=nb_labellingtodo_byla
     if idLabel:
         request.session['idPostedLabel']=idLabel
         ean=labellingToDo.objects.filter(id=idLabel).values('ean').first()
-        if ean['ean']==None:
-            affichage=str(label_in)+' (transformé par preprocessing en : '+str(label_in_preprocessed)+')'
+        if (ean['ean']==None) | (ean['ean']=='nan'):
+            ean=""
         else:
-            affichage=str(label_in)+' (transformé par preprocessing en : '+str(label_in_preprocessed)+') avec pour EAN '+str(ean['ean'])
+            ean=str(ean['ean'])
     
-    return render(request, 'endpoints/labelling_prediction.html', {'label_in': affichage, 'predictions':prediction, 
-            'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
+    return render(request, 'endpoints/labelling_prediction.html', {'label_in': label_in, 'label_in_preprocessed':str(label_in_preprocessed), 'ean':ean,
+            'predictions':prediction, 'nomenclature':nomenclature, 'fichier_nomenclature':fichier_nomenclature, 'warning':warning})
 
 def labelling_summary(request):
     total=list(labellingToDo.objects.values('table_name').annotate(total=Count('table_name')))           
@@ -279,7 +272,7 @@ def labelling_summary(request):
     resbygroup=resbygroup.groupby(['table_name', 'categ']).max().fillna(0).astype(int).reset_index().sort_values(['labeled', 'labeledatleastOnce'], ascending=[False, False]).to_dict('records')  
 
     if request.method == "POST":
-        return HttpResponseRedirect(reverse('labelling_author'))
+        return HttpResponseRedirect(reverse('home'))
     return render(request, 'endpoints/labelling_summary.html', {'resbytable':resbytable,
         'resbygroup':resbygroup})
 

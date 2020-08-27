@@ -10,44 +10,45 @@
     </head>
     <body>
         <div class="page-header">
-            <a href="{% url 'labellingbyhand_label' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
-            <h1><a href="/labellingbyhand/author">Labellisation des données de caisse</a></h1>
+            <a class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <h1>Labellisation des données de caisse</h1>
         </div>
         <div class="content container">
             <div class="row">
                 <div class="col-md-8">
                     <p>Pour le  libellé {{ label_in }} :</p>
                         <table border="1" width="600">
-                                <tr>
-                                <td align="center"><B>Prediction</B></td>
-                                <td align="center"><B>Probabilité</B></td>
-                                </tr>
-                                <form method="POST" class="post-form">{% csrf_token %}
-                                {% for pred in predictions %}
+                            <tr>
+                            <td align="center"><B>Prediction</B></td>
+                            <td align="center"><B>Probabilité</B></td>
+                            </tr>
+                            
+                            <form id="formPrediction" method="POST" class="post-form">{% csrf_token %}
+                            {% for pred in predictions %}
                                 <tr>
                                 <td><input type="radio" name="label_out" id="label_out{{ pred.prediction }}" value="{{ pred.prediction }}" />
                                     <label for="label_out{{ pred.prediction }}">{{ pred.prediction }}</label>
                                 </td>
                                 <td>{{ pred.probability }}</td>
                                 </tr>
-                                {% endfor %}
+                            {% endfor %}
                                 
-                                {% if fichier_nomenclature %}
+                            {% if fichier_nomenclature %}
                                 <tr>
                                 <td><input type="radio" name="label_out" id="label-other" value="" />
-                                    <input id="getselection" name="getselection" list="suggestion" type="text">
-                                    <datalist id="suggestion">
-                                    {% for other in nomenclature %}
-                                        <option value="{{ other }}">
-                                    {% endfor %}
-                                    </datalist>
+                                    <select id="getselection" name="getselection" class="scrolling">
+                                        <option value="" class="italique" selected disabled hidden>Choisir le libellé dans la nomenclature</option>
+                                        {% for other in nomenclature %}
+                                            <option value="{{ other }}">{{ other }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </td>
                                 <td></td>
                                 </tr>
-                                {% endif %}
+                            {% endif %}
                                 
-                                <button type="submit" class="save btn btn-default">Choisir</button>
-                                </form>
+                            <button type="submit" class="save btn btn-default">Choisir</button>
+                            </form>
                         </table>
                         {% if warning %}
                             <h5 style="color:rgb(255,0,0);"><b><u>Warning</u></b> : Probas faibles pour les libellés prédits par le modèle</h5>
@@ -60,7 +61,30 @@
             var getvalue=document.getElementsByName('getselection')[0];
             var val = getvalue.addEventListener('input', function(){
                 document.getElementById('label-other').value=this.value;
-            })                        
+            });
+
+            var formPrediction = document.getElementById('formPrediction');
+            formPrediction.addEventListener('submit', function(e) {
+                    var radioButtons = document.getElementsByName('label_out'),
+                        nochecked = true;
+
+                    for (var i = 0, length = radioButtons.length; i < length; i++) {
+                        if(radioButtons[i].checked) nochecked = false;
+                    }
+
+                    if (nochecked) {
+                        e.preventDefault();
+                        alert('Il faut cocher une case avant de cliquer sur choisir');
+                    }
+
+                    if (radioButtons[3].checked){
+                        var labelout=document.getElementsByName('getselection')[0].value;
+                        if (labelout == "") {
+                            e.preventDefault();
+                            alert('Il faut choisir un libellé dans la nomenclature avant de cliquer sur choisir');
+                        }
+                    }
+                });                        
         </script>
 
     </body>
