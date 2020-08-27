@@ -19,12 +19,11 @@
             <div class="row">
                 <div class="col-md-8">
                     <form method="POST" class="post-form">{% csrf_token %}
-                        <input list="suggestion" type="text" name="groupselected" id="groupselected">
-                        <datalist id="suggestion">
+                        <select id="suggestion" name="groupselected" class="scrolling">
                             {% for gr in groups %}
-                                <option value="{{ gr }}">
+                                <option value="{{ gr }}">{{ gr }}</option>
                             {% endfor %}
-                        </datalist>
+                        </select>
                         <p class="sep"></p>
                         <button type="submit" class="save btn btn-default">Commencer la labellisation de ce groupe</button>
                     </form>
