@@ -19,12 +19,11 @@
             <div class="row">
                 <div class="col-md-8">
                     <form method="POST" class="post-form">{% csrf_token %}
-                        <input list="suggestion" type="text" name="tableselected" id="tableselected">
-                        <datalist id="suggestion">
+                        <select name="tableselected" id="tableselected" class="scrolling">
                             {% for table in tables %}
-                                <option value="{{ table }}">
+                                <option value="{{ table }}">{{ table }}</option>
                             {% endfor %}
-                        </datalist>
+                        </select>
                         <p class="sep"></p>
                         <button type="submit" class="save btn btn-default">Commencer la labellisation de ce fichier</button>
                     </form>
