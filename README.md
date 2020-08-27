@@ -24,7 +24,7 @@ Product-labelling configuration
 | --------------------- | ------- | ------------------------------------------------------------------ |
 | `model` | `none` | URL of text classification model - fasttext model saved with .ftz extension (must be configured) |
 | `nomenclature` | `none` | URL of a CSV file which contains complete list of nomenclature products with no header |
-| `db_type` | `sqlite3` | Supported modes are : `postgres` |
+| `db_type` | `sqlite3` | Other supported mode : `postgres` |
 
 Product-labelling configuration if `dbtype`==`postgres`
 | Key | Default | Description |
