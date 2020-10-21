@@ -10,21 +10,21 @@
     </head>
     <body>
         <div class="page-header">
-            <a class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <a href="{% url 'home' %}" class="top-menu"><span class="glyphicon glyphicon-share-alt"></span> Retour à l'accueil</a>
             <h1>Labellisation des données de caisse</h1>
         </div>
         <div class="content container">
             <div class="row">
                 <div class="col-md-8">
-                    <p><strong>Libellé</strong> : {{ label_in }}</p>
-                    <p><strong>Preprocessing</strong> : {{ label_in_preprocessed }}</p>
-                    
+                    <p><strong>Libellé</strong> : <font size="+1">{{ label_in }}</font></p>
+                    <p><strong>Preprocessing</strong> : <font size="+1">{{ label_in_preprocessed }}</font></p>
+
                         <table border="1" width="600">
                             <tr>
                             <td align="center"><B>Prediction</B></td>
                             <td align="center"><B>Probabilité</B></td>
                             </tr>
-                            
+
                             <form id="formPrediction" method="POST" class="post-form">{% csrf_token %}
                             {% for pred in predictions %}
                                 <tr>
@@ -34,7 +34,7 @@
                                 <td>{{ pred.probability }}</td>
                                 </tr>
                             {% endfor %}
-                                
+
                             {% if fichier_nomenclature %}
                                 <tr>
                                 <td><input type="radio" name="label_out" id="label-other" value="" />
@@ -48,12 +48,12 @@
                                 <td></td>
                                 </tr>
                             {% endif %}
-                                
+
                             <button type="submit" class="save btn btn-default">Choisir</button>
                             </form>
                         </table>
                         {% if warning %}
-                            <h5 style="color:rgb(255,0,0);"><b><u>Warning</u></b> : Probas faibles pour les libellés prédits par le modèle</h5>
+                            <h5 style="color:rgb(255,0,0);"><b><u>Warning</u></b> : Probas faibles pour les libellés prédits par le modèle (< 0.7)</h5>
                         {% endif %}
                 </div>
             </div>
@@ -86,7 +86,7 @@
                             alert('Il faut choisir un libellé dans la nomenclature avant de cliquer sur choisir');
                         }
                     }
-                });                        
+                });
         </script>
 
     </body>
