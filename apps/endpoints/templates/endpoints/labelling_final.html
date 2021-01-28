@@ -11,13 +11,13 @@
     </head>
     <body>
         <div class="page-header">
-            <a href="{% url 'home' %}" class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <a href="{% url 'home' %}" class="top-menu"><span class="glyphicon glyphicon-share-alt"></span> Retour à l'accueil</a>
             <h1><a href="/home">Labellisation des données de caisse</a></h1>
         </div>
 
         <div class="content container">
             <h3>Fin de labellisation d'un fichier</h3>
-                            
+
             <p class="sep"></p>
             <table id="table1" cellpadding="0" cellspacing="0" border="1" width="700">
                 <thead>
@@ -31,15 +31,15 @@
                 <tbody>
                     {% for row in resbytable %}
                     <tr>
-                        <td>{{ row.tableName }}</td>  
-                        <td>{{ row.labeledatleastOnce }}</td> 
-                        <td>{{ row.labeled }}</td> 
-                        <td>{{ row.total }}</td> 
+                        <td>{{ row.tableName }}</td>
+                        <td>{{ row.labeledatleastOnce }}</td>
+                        <td>{{ row.labeled }}</td>
+                        <td>{{ row.total }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-        
+
             <p class="sep"></p>
             <table id="table2" cellpadding="0" cellspacing="0" border="1" width="700">
                 <tr>
@@ -51,18 +51,18 @@
                 </tr>
                 {% for row in resbygroup %}
                 <tr>
-                    <td>{{ row.tableName }}</td>  
-                    <td>{{ row.categ }}</td> 
-                    <td>{{ row.labeledatleastOnce }}</td> 
-                    <td>{{ row.labeled }}</td> 
-                    <td>{{ row.total }}</td> 
+                    <td>{{ row.tableName }}</td>
+                    <td>{{ row.categ }}</td>
+                    <td>{{ row.labeledatleastOnce }}</td>
+                    <td>{{ row.labeled }}</td>
+                    <td>{{ row.total }}</td>
                 </tr>
                 {% endfor %}
             </table>
-  
+
             <p class="sep"></p>
             <div class="row">
-                <div class="col-md-6">         
+                <div class="col-md-6">
                 <form method="POST" class="post-form">{% csrf_token %}
                     <p class="sep"><label for="unknown"><h4>Pour permettre de labelliser à nouveau les produits taggés comme "je ne sais pas": </h4></label>
                     <button type="submit" class="save btn btn-default" name="unknown" value=None>Re-labelliser</button></p>
@@ -79,7 +79,7 @@
         <script data-config="">
             var filtersConfig1 =  {
                 base_path: '../../static/js/',
-                col_0: "select",  
+                col_0: "select",
                 col_1: "none",
                 col_2: "none",
                 col_3: "none",
@@ -87,15 +87,15 @@
             };
             var tf1 = new TableFilter('table1', filtersConfig1);
             tf1.init();
-        
+
             var filtersConfig2 =  {
                 base_path: '../../static/js/',
-                col_0: "select",  
+                col_0: "select",
                 col_1: "select",
                 col_2: "none",
                 col_3: "none",
                 col_4: "none",
-                display_all_text: " [ Show all ] ", 
+                display_all_text: " [ Show all ] ",
                 sort_select: true
             };
             var tf2 = new TableFilter('table2', filtersConfig2);

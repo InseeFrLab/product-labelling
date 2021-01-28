@@ -10,26 +10,26 @@
     </head>
     <body>
         <div class="page-header">
-            <a class="top-menu"><span class="glyphicon glyphicon-remove"></span></a>
+            <a href="{% url 'home' %}" class="top-menu"><span class="glyphicon glyphicon-share-alt"></span> Retour à l'accueil</a>
             <h1>Labellisation des données de caisse</h1>
         </div>
-      
+
         <div class="content container" id="divPrediction">
             <div class="row">
                 <div class="col-md-8">
-                    <p><strong>Libellé</strong> : {{ label_in }}</p>
-                    <p><strong>Preprocessing</strong> : {{ label_in_preprocessed }}</p>
+                    <p><strong>Libellé</strong> : <font size="+1">{{ label_in }}</font></p>
+                    <p><strong>Preprocessing</strong> : <font size="+1">{{ label_in_preprocessed }}</font></p>
 
                     {% if ean %}
-                        <p><strong>EAN</strong> : {{ ean }}</p>
+                        <p><strong>EAN</strong> : {{ ean }} <a href = "https://www.google.com/search?q={{ ean }}" target="_blank" style="padding:0 0 0 20px;">Rechercher cet EAN sur Google</a> </p>
                     {% endif %}
-                    
+
                     <table border="1" width="600">
                         <tr>
                         <td align="center"><B>Prediction</B></td>
                         <td align="center"><B>Probabilité</B></td>
                         </tr>
-                            
+
                         <form id="formPrediction" method="POST" class="post-form">{% csrf_token %}
                             {% for pred in predictions %}
                                 <tr>
@@ -39,7 +39,7 @@
                                 <td>{{ pred.probability }}</td>
                                 </tr>
                             {% endfor %}
-                                
+
                             {% if fichier_nomenclature %}
                                 <tr>
                                 <td><input type="radio" name="label_out" id="label-other" value=""/>
@@ -53,13 +53,13 @@
                                 <td></td>
                                 </tr>
                             {% endif %}
-                                   
-                            <button type="submit" class="save btn btn-default">Choisir</button>                        
+
+                            <button type="submit" class="save btn btn-default">Choisir</button>
                         </form>
-                    </table> 
+                    </table>
 
                     {% if warning %}
-                        <h5 style="color:rgb(255,0,0);"><b><u>Warning</u></b> : Probas faibles pour les libellés prédits par le modèle</h5>
+                        <h5 style="color:rgb(255,0,0);"><b><u>Warning</u></b> : Probas faibles pour les libellés prédits par le modèle (< 0.7)</h5>
                     {% endif %}
 
                     <div class="row">
@@ -70,10 +70,10 @@
                     <div class="row">
                         <form method="POST" class="post-form">{% csrf_token %}
                             <p class="sep"><button class="save btn btn-default" name="stop" value=None>Arrêter de labelliser</button></p>
-                        </form> 
+                        </form>
                     </div>
                 </div>
-            </div>            
+            </div>
         </div>
 
         <script>
@@ -102,7 +102,7 @@
                             e.preventDefault();
                             alert('Il faut choisir un libellé dans la nomenclature avant de cliquer sur choisir');
                         }
-                    } 
+                    }
                 });
         </script>
 
